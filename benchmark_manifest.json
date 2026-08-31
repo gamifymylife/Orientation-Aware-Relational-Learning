@@ -1,0 +1,14 @@
+{
+  "project": "Orientation-Aware Benchmark",
+  "version": "0.4.0",
+  "gate": "Robustness to imperfect orientation classification",
+  "question": "How accurate must structural metadata be before quotienting and admissibility gating are safe?",
+  "headline_500_seed_results": {
+    "one_false_merge_among_8_classes_correctness_change_pp": -8.6,
+    "one_of_4_invalid_orientations_reopened_correctness_change_pp": -79.8,
+    "reject_25_percent_valid_orientations_correctness_change_pp": 0.0,
+    "transport_noise_0_10_correctness_change_pp": -4.0
+  },
+  "design_rule": "Prefer false splits/abstention over false merges or unsupported admissibility declarations.",
+  "next_gate": "Certified approximate quotienting with explicit risk bounds and abstention"
+}
