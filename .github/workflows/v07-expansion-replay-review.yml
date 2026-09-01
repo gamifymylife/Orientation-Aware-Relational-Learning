@@ -1,0 +1,69 @@
+name: v0.7 expansion replay review
+
+on:
+  pull_request:
+    paths:
+      - "external/v07/expansion_replay/**"
+      - "evidence/v07/external/METADATA_EXPANSION_001.json"
+      - ".github/workflows/v07-expansion-replay-review.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  replay:
+    strategy:
+      fail-fast: false
+      matrix:
+        case: [smol_2029, smol_1914, smol_495]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Assert candidate remains metadata-only and OARL-unseen
+        env:
+          CASE: ${{ matrix.case }}
+        run: |
+          python - <<'PY'
+          import ast, json, os
+          from pathlib import Path
+          case = os.environ['CASE']
+          number = int(case.rsplit('_', 1)[1])
+          repo = 'huggingface/smolagents'
+          expansion = json.loads(Path('evidence/v07/external/METADATA_EXPANSION_001.json').read_text())
+          assert expansion['oarl_executed'] is False
+          row = next(x for x in expansion['candidates'] if x['repository'] == repo and x['pr_number'] == number)
+          assert row['oarl_executed'] is False
+          assert row['status'] == 'METADATA_ONLY_NEEDS_ACTUAL_REVISION_REPLAY'
+          path = Path(f'external/v07/expansion_replay/verify_{case}.py')
+          tree = ast.parse(path.read_text())
+          constants = {}
+          for node in tree.body:
+              if isinstance(node, ast.Assign) and len(node.targets) == 1 and isinstance(node.targets[0], ast.Name):
+                  try:
+                      constants[node.targets[0].id] = ast.literal_eval(node.value)
+                  except Exception:
+                      pass
+          assert constants['CONFIRMATION_REPEATS'] >= 3
+          assert len(constants['PRE_FIX']) == 40 and len(constants['POST_FIX']) == 40
+          assert constants['PRE_FIX'] != constants['POST_FIX']
+          print(f'{case}: metadata/OARL boundary PASS')
+          PY
+      - name: Replay exact historical revisions
+        env:
+          CASE: ${{ matrix.case }}
+        run: |
+          mkdir -p replay-output
+          python "external/v07/expansion_replay/verify_${CASE}.py" | tee "replay-output/${CASE}.json"
+      - name: Upload replay review
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: v07-expansion-${{ matrix.case }}
+          path: replay-output/${{ matrix.case }}.json
+          if-no-files-found: warn
+          retention-days: 90
