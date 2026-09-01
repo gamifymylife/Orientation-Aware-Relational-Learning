@@ -24,197 +24,211 @@ Interpretation: precision-first finite-noise equivalence certification is viable
 
 ## External escalation: v0.6
 
-External validity is now higher priority than further optimization of the synthetic construction.
-
 ### Completed: v0.6 CSuite suitability pilot
 
 The adapter ran, but the tested published CSuite systems expose too few candidate intervention views for a serious pairwise equivalence-discovery benchmark. The suitability failure is preserved rather than manufacturing OARL-specific views.
 
 ### Completed: v0.6.1 pyGSTi finite-shot external gate
 
-The deterministic gauge-equivalence smoke gate passed. The preregistered finite-shot competitive gate then asked whether shallow evidence at circuit depths 0–3 could safely certify equivalence under sealed depths 4–6.
-
 Result: **primary safety gate failed**.
 
-- 9,600 classifications per method;
-- generic shallow probability comparator: 1,191 operational false merges, precision 0.7497;
-- OARL cross-fit + depth stability: 522 operational false merges, precision 0.8355;
-- decisive boundary case: `op_noise=0.010`, sealed max difference 0.02926 > epsilon 0.020;
-- OARL false merges on that class increased from 0/300 at 50k shots to 282/300 at 500k shots.
+- generic shallow comparator: 1,191 operational false merges;
+- OARL cross-fit + depth stability: 522 operational false merges;
+- on the decisive `op_noise=0.010` class, OARL false merges rose from 0/300 at 50k shots to 282/300 at 500k shots.
 
 Interpretation: more evidence inside an insufficient boundary can increase confidence in an unsafe merge.
 
 ### Completed: v0.6.2 Boundary Information Audit
 
-v0.6.2 tested evidence quantity versus information span directly.
-
-- initial Fisher spectrum approximately `[0, 1, 1]`;
-- initial rank 2, nullity 1;
+- initial Fisher rank 2 of 3;
 - repetition factors 1, 10, 100 and 1000 all remained rank 2;
-- at 1000x repetition the spectrum was approximately `[0, 1000, 1000]`;
-- one depth-2 circuit completed rank 3;
-- OARL-motivated null-space coverage and greedy D-optimality both reached rank 3 at added depth cost 2.
+- one new depth-2 circuit completed rank 3;
+- OARL null-space coverage and greedy D-optimality tied at added cost 2.
 
-Interpretation: the “100 A's do not create a new informational direction” phenomenon is cleanly demonstrated, but rank-aware measurement selection is established optimal-design territory rather than an OARL novelty.
+Interpretation: information magnitude and information span are different, but rank-aware measurement selection is classical optimal-design territory rather than an OARL novelty.
 
 ### Completed: v0.6.3 Safe Quotient Before Fixed D-Optimal Design
 
-v0.6.3 finally held the downstream optimizer fixed and tested the structural quotient layer itself.
+The downstream D-optimal algorithm was held identical for every method.
 
-Frozen benchmark:
+Result: **primary structural safety gate failed**.
 
-- 254 physical pyGSTi circuits, depths 1–7;
-- two hidden binary outcome conventions per circuit;
-- 508 candidate views;
-- 19 mechanism probes;
-- two independent 50,000-shot evidence splits;
-- task-equivalence oracle: exact equality of local Fisher matrices at relative tolerance `1e-8`;
-- same 8-step greedy D-optimal selector with replacement for every method.
+- RAW: 508 classes, logdet 11.3141815, 4,064 score evaluations;
+- ORACLE: 170 classes, 66.5% compression, identical downstream result;
+- POINT: 1,143 false task merges;
+- UCB: 1,032 false task merges;
+- OARL-XFIT: 42.5% compression and preserved RAW logdet, but **555 false task merges**.
 
-Result: **primary structural safety gate failed; OARL-specific utility not established**.
-
-- RAW: 508 classes, D-opt logdet 11.3141815, 4,064 score evaluations;
-- ORACLE: 170 classes, 66.5% compression, identical D-opt logdet and depth cost, 1,360 score evaluations;
-- POINT: 216 classes, 1,143 false task merges, D-opt logdet 11.1466039;
-- UCB: 225 classes, 1,032 false task merges, D-opt logdet 11.1466039;
-- OARL-XFIT: 292 classes, 42.5% compression, **555 false task merges**, pair precision 0.2620, but the RAW D-opt logdet and depth cost were preserved exactly.
-
-The oracle result proves there is a large real structural-compression opportunity in this external candidate space. The failure is in **learning the correct equivalence relation safely**.
-
-The critical lesson is that finite response-level similarity is not the same object as task-relative Fisher/D-optimal equivalence. Near-equal probe probabilities can have materially different local derivatives/Fisher geometry.
+Interpretation: a large safe quotient exists, but finite response similarity is the wrong object to certify. Near-equal responses can have different local derivative/Fisher geometry.
 
 See `evidence/v063/V063_RESULT.md`.
 
-## Next: v0.6.4 — task-aligned equivalence certification
+### Completed: v0.6.4 Task-Aligned Equivalence Certification
+
+v0.6.4 moved the certificate into the object the downstream D-optimal task actually uses: finite Fisher geometry plus D-optimal marginal-value distortion.
+
+Frozen benchmark:
+
+- same external pyGSTi candidate family: 508 views;
+- 19 mechanism probes;
+- fresh seeds `640401` / `640402`;
+- two independent 100,000-shot splits;
+- 2,543 finite-FIM-shortlisted pairs;
+- evaluator operational equivalence: relative Fisher distortion <=0.20 and frozen D-opt anchor distortion <=0.05;
+- identical 8-step D-optimal downstream optimizer for every quotient.
+
+Result: **safety repaired, useful compression failed**.
+
+- RAW: 508 classes, logdet 11.3141815, 4,064 score evaluations;
+- ORACLE: **91 classes**, **82.1% compression**, identical logdet and depth cost, 728 score evaluations;
+- TV-UCB: 74.4% compression but **1,196 false task merges** and logdet loss 0.2652;
+- FIM-POINT: 491 classes, **3.35% compression**, 21 accepted pairs, **0 false merges**, precision 1.000, identical logdet;
+- FIM-UCB: 508 classes, **0% compression**, 0 false merges;
+- OARL-TASK-XFIT: 508 classes, **0% compression**, 0 false merges, identical logdet.
+
+Primary checks:
+
+- oracle tolerance preserves RAW: PASS;
+- OARL zero false task merges: PASS;
+- OARL downstream preservation: PASS;
+- OARL depth cost no greater than RAW: PASS;
+- OARL compression >=20%: **FAIL**.
+
+The family contains 3,842 evaluator-side task-equivalent pairs globally and 1,263 inside the learned shortlist, so the failure is not absence of structure. It is finite-evidence certification power.
+
+The frozen learned methods consumed **1,930,400,000 Bernoulli shot units** each. FIM-UCB and OARL saved zero downstream score evaluations. Even FIM-POINT's small safe quotient required roughly **14.2 million shot units per D-opt score evaluation saved**.
+
+Diagnostic: task alignment fixed the v0.6.3 wrong-object problem, but direct local derivative/Fisher estimation from independent finite shots is too noisy and data-hungry. Among true-equivalent shortlisted pairs, the median pooled Fisher point distance was ~0.225 and the median pooled Fisher bootstrap UCB ~0.593; no true pair passed the frozen pooled D-opt decision UCB.
+
+See `evidence/v064/V064_RESULT.md`.
+
+## Next: v0.6.5 — structural transport first, adaptive task certification second
 
 This is now the highest-priority scientific gate.
 
 ### Decisive question
 
-> Can finite evidence certify that substituting one experiment for another changes the downstream task by no more than a preregistered amount, rather than merely certifying that their observed response vectors are close?
+> Can a cheap structural/transport proposal stage identify high-probability equivalence candidates, then allocate task-aligned evidence sequentially only where needed, achieving nontrivial safe compression at materially lower evidence cost than exhaustive pairwise Fisher certification?
 
-The v0.6.3 failure says the certifier must target the object that the quotient is required to preserve.
+The next method must not simply multiply IID samples across every view × probe cell. v0.6.4 shows that route is economically poor even before broader deployment concerns.
 
-### Candidate preserved objects
+### Required architecture
 
-For the current D-optimal task, prospective methods may certify one of the following directly:
+```text
+candidate experimental views
+        ↓
+cheap structural / transform proposal
+        ↓
+small candidate equivalence graph
+        ↓
+sequential task-aligned evidence
+        ↓
+EQUIVALENT | DISTINCT | UNKNOWN
+        ↓
+complete-link safe quotient
+        ↓
+unchanged D-optimal optimizer
+```
 
-1. **Fisher-information distortion**
-   - estimate local sensitivities from finite probe evidence;
-   - construct simultaneous uncertainty sets for the sensitivity vectors;
-   - derive an upper bound on relative FIM distortion under substitution;
-   - merge only when the entire bound lies inside a frozen tolerance.
+### Structural proposal stage
 
-2. **D-optimal objective distortion**
-   - bound the worst-case change in `log det(I + F_e)` over a preregistered family of current-information states `I`;
-   - certify substitution only when the decision value difference is uniformly small.
+Use only benchmark-neutral observable structure. Candidate mechanisms to test include:
 
-3. **Decision-theoretic / deficiency-style distortion**
-   - define a task-restricted loss family;
-   - estimate a Blackwell/Le Cam-inspired deficiency or simulation bound between candidate experiments;
-   - certify only when the implied worst-case decision-risk increase is within tolerance.
+- outcome-label permutation / complement hypotheses;
+- canonicalized response signatures;
+- transport consistency across mechanism probes;
+- symmetry/canonicalization baselines;
+- learned transform proposals without evaluator metadata.
 
-These are alternatives, not three claims to combine indiscriminately. The chosen v0.6.4 method must be frozen before confirmatory evidence.
+The proposal stage may improve recall/cost but cannot itself declare a safe merge unless the transform is exact by construction.
+
+### Adaptive certification stage
+
+Instead of collecting the same probe budget everywhere:
+
+1. start with a small frozen pilot shot budget per proposed pair;
+2. estimate task/Fisher distortion uncertainty;
+3. stop early as `DISTINCT` when a margin is crossed;
+4. stop early as `EQUIVALENT` only when the task-distortion upper bound is inside tolerance;
+5. otherwise allocate another evidence batch up to a preregistered cap;
+6. unresolved pairs remain `UNKNOWN`.
+
+Report the full distribution of evidence spent per pair, not only total runtime.
 
 ### Mandatory baselines
 
-At minimum compare against:
+At minimum:
 
-- RAW no quotient;
-- ORACLE task quotient;
-- point response similarity;
-- response UCB equivalence;
-- direct noisy-FIM similarity;
-- conservative FIM confidence-bound equivalence;
-- a Blackwell/Le Cam-inspired task-restricted comparison where computationally tractable;
-- OARL task-aligned `EQUIVALENT / DISTINCT / UNKNOWN` certificate.
+- RAW;
+- ORACLE;
+- exact/known transform canonicalization where applicable;
+- generic nearest-signature + sequential confidence testing;
+- generic pooled FIM sequential UCB;
+- OARL transform-proposal + task-XFIT sequential certification.
 
-The same downstream D-optimal algorithm must remain fixed for every method.
+If a generic transform/canonicalization pipeline dominates, narrow the OARL-specific claim.
 
-### Primary safety endpoint
+### Primary gate
 
-False accepted substitutions measured against the **task oracle**, not generic response similarity.
+Require simultaneously:
 
-Zero false task merges remains the preferred primary gate. If a nonzero tolerance is used, it must be defined prospectively as a bound on downstream decision/information distortion, not chosen after seeing results.
+1. zero operational task-false merges;
+2. >=20% compression;
+3. downstream D-opt logdet within the frozen tolerance of RAW;
+4. no greater selected depth cost than RAW;
+5. at least **10× lower finite-evidence cost** than the v0.6.4 exhaustive 1.9304B-shot reference, unless the downstream score cost independently justifies a smaller reduction.
 
-### Utility endpoint
-
-Only after safety passes, measure:
-
-`cost(structural evidence + certification + quotient D-opt)`
-
-against
-
-`cost(raw D-opt)`.
-
-The v0.6.3 break-even estimate (~1,511 probability-cell operations per saved D-opt score evaluation for OARL-XFIT) is descriptive only because the safety gate failed.
+The 10× target is a new v0.6.5 prospective requirement, not a reinterpretation of v0.6.4.
 
 ### Kill / narrowing criterion
 
-If a generic conservative FIM/deficiency baseline safely learns the quotient at equal or lower cost, narrow OARL to the broader **task-aligned structural audit / abstention architecture** rather than claiming a unique certification algorithm.
-
-If no finite-evidence method obtains useful compression without false task merges, preserve v0.5 synthetic results and treat safe external quotient discovery as unresolved rather than deployable.
+If safe compression still requires evidence on the order of exhaustive acquisition, the project should stop presenting external finite-noise quotient discovery as an efficiency method. The surviving contribution would then be the boundary-relative identifiability / structural-audit framework and exact/synthetic quotienting results.
 
 ## Paper programme
 
-The August 2026 OARL paper is historical. The current manuscript is `paper/CONFIDENCE_WITHOUT_IDENTIFIABILITY_v0_1.md`.
+The August 2026 OARL paper remains historical. The current manuscript is `paper/CONFIDENCE_WITHOUT_IDENTIFIABILITY_v0_1.md`.
 
-The paper should now make the evidence trajectory explicit:
+The paper should preserve the failure sequence rather than hide it:
 
-1. fixed-boundary exact equivalence survives IID repetition;
-2. Fisher information magnitude can grow without information span growing;
+1. exact fixed-boundary equivalence survives IID repetition;
+2. Fisher magnitude can grow without span growing;
 3. v0.6.1: confidence can outpace boundary adequacy;
-4. v0.6.2: one genuinely new observation direction can add rank that 1000x repetition cannot;
-5. classical D-optimality already solves the local rank-selection problem;
-6. v0.6.3: even when a large safe oracle quotient exists, generic response equivalence is not a safe proxy for the downstream task-equivalence relation;
-7. therefore the remaining contribution is **task-aligned, risk-bounded structural certification with abstention before ordinary optimal design**.
+4. v0.6.2: a new boundary adds rank that 1000× repetition cannot, while D-optimality already handles the local selection problem;
+5. v0.6.3: response similarity gives useful compression but unsafe task merges;
+6. v0.6.4: task-aligned Fisher certification repairs safety but collapses to zero useful coverage under conservative finite uncertainty;
+7. v0.6.5 therefore tests whether structural transport + selective evidence can recover the oracle opportunity economically.
 
-Do not submit the manuscript as a strong algorithm paper until v0.6.4 or an equivalent task-aligned held-out gate resolves the certification burden.
+Do not submit the manuscript as a strong algorithm paper until v0.6.5 or an equivalent independent gate resolves the safety/coverage/cost frontier.
 
-## Still required: v0.5C practical gate
+## Still required: practical admissibility and end-to-end economics
 
-v0.5C remains necessary but is downstream of the task-aligned safety problem.
+Admissibility certification remains unresolved. The system must distinguish certified admissible, certified invalid and unknown, with invalid-as-valid as the primary safety error.
 
-### Admissibility certification
-
-The system must distinguish certified admissible, certified invalid and unknown. The primary safety metric is invalid-as-valid rate.
-
-### End-to-end finite-noise economics
-
-Measure:
-
-`cost(certificate evidence) + cost(certification) + cost(quotient OED)`
-
-against:
-
-`cost(exhaustive Generic OED)`.
-
-Do not call the method deployable unless the full pipeline is cheaper while preserving correctness and risk.
+End-to-end economics must include evidence acquisition, certification, downstream score evaluations, wall time, final correctness and abstention. Do not call the method deployable unless the full pipeline is cheaper while preserving risk.
 
 ## Later generalization
 
-After v0.6.4:
+After v0.6.5:
 
-1. run corrected DREAM4 Size100 confirmatory gate;
-2. add another third-party executable benchmark with genuine redundant admissible views;
-3. implement held-out-orientation representation generalization;
-4. add a classical dynamical-system benchmark with known symmetries/equivalences;
-5. add an ABM equifinality benchmark;
-6. test non-Gaussian predictive families;
-7. test non-affine and approximate transports with calibrated abstention;
-8. run a prospective/blinded mechanism-discrimination task.
+1. add another third-party executable benchmark with genuine redundant admissible views;
+2. run corrected DREAM4 Size100 only if the benchmark supports the relevant quotient task;
+3. add a classical dynamical-system symmetry benchmark;
+4. add an ABM equifinality benchmark;
+5. test non-Gaussian predictive families;
+6. test non-affine and approximate transports;
+7. run a prospective/blinded mechanism-discrimination task.
 
 ## Novelty gate
 
-The novelty burden is not the fact that quotienting known duplicates saves search, not the fact that repeated sampling cannot create missing Fisher rank, and not the classical comparison of statistical experiments.
+The novelty burden is not known symmetry reduction, Fisher-rank design, Blackwell comparison, or the fact that quotienting known duplicates saves search.
 
-The remaining burden is whether an orientation-/boundary-aware **discovery, certification and abstention layer** can learn a task-valid structural quotient from finite evidence and improve safety or total cost when the downstream inference algorithm is held fixed.
+The remaining burden is whether a boundary-aware **discovery + certification + abstention** layer can learn a task-valid quotient from finite evidence and improve the safety/coverage/cost frontier while the downstream optimizer is held fixed.
 
 ## Repository engineering
 
 - Keep evidence immutable by version.
-- Tag confirmatory releases when tooling permits.
 - Never overwrite preregistered apparatus after a mismatch; issue a new version.
 - Preserve failed pilots and negative confirmatory results.
+- Tag confirmatory releases when tooling permits.
 - Add independent reproduction when feasible.
 - Select an explicit software/content license before external reuse is encouraged.
