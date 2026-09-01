@@ -1,0 +1,50 @@
+{
+  "schema_version": 1,
+  "case_id": "REPLACE",
+  "source": "owner/repo#pr",
+  "status": "UNRUN",
+  "repository": "owner/repo",
+  "pre_fix_revision": "40_HEX",
+  "post_fix_revision": "40_HEX",
+  "common_interface": {
+    "description": "",
+    "python": "3.11",
+    "offline_or_mocked": true,
+    "credentials_required": false
+  },
+  "historical_replay": {
+    "stable_pre_fix_repeats": 0,
+    "stable_post_fix_repeats": 0,
+    "same_interface": false,
+    "negative_control_pass": false
+  },
+  "candidate_space": {
+    "experiment_count": 0,
+    "orientation_count": 0,
+    "validity_rate": 0.0,
+    "generation_rule": "FROZEN_GENERIC_RULE",
+    "manifest_sha256": "64_HEX"
+  },
+  "frozen_artifacts": {
+    "adapter_sha256": "64_HEX",
+    "evaluator_sha256": "64_HEX",
+    "relation_generator_sha256": "64_HEX"
+  },
+  "cost_preflight": {
+    "measured_probe_runtime_seconds": null,
+    "paid_call_cost": 0.0,
+    "notes": ""
+  },
+  "leakage_checks": {
+    "pr_text_available_to_policy": false,
+    "changed_files_available_to_policy": false,
+    "known_witness_available_to_policy": false,
+    "evaluator_labels_available_to_policy": false,
+    "semantic_bug_labels_available_to_policy": false
+  },
+  "oarl_executed": false,
+  "admission": {
+    "eligible": false,
+    "reason": "UNRUN"
+  }
+}
