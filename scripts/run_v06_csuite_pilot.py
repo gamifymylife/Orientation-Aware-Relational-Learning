@@ -1,0 +1,111 @@
+from __future__ import annotations
+
+import argparse
+import csv
+import hashlib
+import json
+from pathlib import Path
+import urllib.request
+
+import numpy as np
+
+from oarl_bench.competitive import exact_duplicate_baseline, similarity_baseline
+from oarl_bench.csuite import (
+    all_oracle_pair_scores,
+    discovery_signatures,
+    load_csuite_interventions,
+)
+
+
+PILOT_DATASETS = ("lingauss", "nonlin_simpson", "cat_chain")
+BASE_URL = "https://azuastoragepublic.blob.core.windows.net/datasets"
+
+
+def _download(url: str, destination: Path) -> str:
+    destination.parent.mkdir(parents=True, exist_ok=True)
+    with urllib.request.urlopen(url, timeout=120) as response:
+        data = response.read()
+    destination.write_bytes(data)
+    return hashlib.sha256(data).hexdigest()
+
+
+def _finite(values: list[float]) -> list[float]:
+    return [value for value in values if np.isfinite(value)]
+
+
+def main() -> None:
+    parser = argparse.ArgumentParser(description="Run the preregistered CSuite v0.6 pilot adapter check")
+    parser.add_argument("--out", type=Path, default=Path("evidence/v06/pilot_outputs"))
+    parser.add_argument("--cache", type=Path, default=Path(".cache/csuite-v0.1"))
+    args = parser.parse_args()
+    args.out.mkdir(parents=True, exist_ok=True)
+
+    manifest: dict[str, object] = {
+        "upstream": "microsoft/csuite",
+        "upstream_release": "v0.1",
+        "purpose": "adapter/pilot only; not confirmatory evidence",
+        "pilot_datasets": list(PILOT_DATASETS),
+        "files": {},
+    }
+    system_rows: list[dict[str, object]] = []
+    oracle_rows: list[dict[str, object]] = []
+
+    for dataset in PILOT_DATASETS:
+        path = args.cache / dataset / "interventions.json"
+        url = f"{BASE_URL}/csuite_{dataset}/interventions.json"
+        sha256 = _download(url, path)
+        manifest["files"][dataset] = {"url": url, "sha256": sha256}
+
+        views = load_csuite_interventions(path, system_id=dataset)
+        signatures = discovery_signatures(views)
+        oracle = all_oracle_pair_scores(views)
+        exact = exact_duplicate_baseline(signatures)
+        similarity = similarity_baseline(
+            signatures,
+            max_normalized_rmse=0.20,
+            abstention_band=0.05,
+        )
+
+        nrmse_values = _finite([row.nrmse for row in oracle])
+        corr_values = _finite([row.correlation for row in oracle])
+        system_rows.append(
+            {
+                "dataset": dataset,
+                "views": len(views),
+                "pairs": len(oracle),
+                "oracle_nrmse_min": min(nrmse_values) if nrmse_values else None,
+                "oracle_nrmse_median": float(np.median(nrmse_values)) if nrmse_values else None,
+                "oracle_correlation_max": max(corr_values) if corr_values else None,
+                "exact_equivalent_calls": sum(p.decision.value == "equivalent" for p in exact),
+                "similarity_equivalent_calls": sum(p.decision.value == "equivalent" for p in similarity),
+                "similarity_unknown_calls": sum(p.decision.value == "unknown" for p in similarity),
+            }
+        )
+        oracle_rows.extend(
+            {
+                "dataset": dataset,
+                "left": row.left,
+                "right": row.right,
+                "nrmse": row.nrmse,
+                "correlation": row.correlation,
+                "scale": row.scale,
+                "offset": row.offset,
+            }
+            for row in oracle
+        )
+
+    (args.out / "manifest.json").write_text(json.dumps(manifest, indent=2, sort_keys=True) + "\n")
+    (args.out / "summary.json").write_text(json.dumps(system_rows, indent=2, sort_keys=True) + "\n")
+
+    with (args.out / "oracle_pair_scores.csv").open("w", newline="", encoding="utf-8") as handle:
+        fieldnames = ["dataset", "left", "right", "nrmse", "correlation", "scale", "offset"]
+        writer = csv.DictWriter(handle, fieldnames=fieldnames)
+        writer.writeheader()
+        writer.writerows(oracle_rows)
+
+    print(json.dumps(system_rows, indent=2, sort_keys=True))
+    print("PILOT ONLY: these outputs may calibrate a later frozen confirmatory protocol; they are not a v0.6 pass/fail result.")
+
+
+if __name__ == "__main__":
+    main()
