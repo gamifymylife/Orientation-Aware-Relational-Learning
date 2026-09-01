@@ -43,7 +43,12 @@ def success_probability_vector(model, circuits: list[pygsti.circuits.Circuit]) -
         probs = model.probabilities(circuit)
         outcome = sorted(probs, key=str)[0]
         values.append(float(probs[outcome]))
-    return np.asarray(values, dtype=float)
+    vector = np.asarray(values, dtype=float)
+    # pyGSTi may return ideal probabilities a few ulps outside [0, 1]. Preserve
+    # the scientific model but remove numerical roundoff before binomial draws.
+    if float(np.min(vector)) < -1e-10 or float(np.max(vector)) > 1.0 + 1e-10:
+        raise ValueError("model produced materially invalid circuit probabilities")
+    return np.clip(vector, 0.0, 1.0)
 
 
 def random_gauge_matrix(rng: np.random.Generator) -> np.ndarray:
