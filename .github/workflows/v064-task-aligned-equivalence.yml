@@ -1,0 +1,44 @@
+name: v0.6.4 task-aligned equivalence gate
+
+on:
+  pull_request:
+    paths:
+      - 'scripts/run_v064_task_aligned_gate.py'
+      - 'evidence/v064/**'
+      - '.github/workflows/v064-task-aligned-equivalence.yml'
+  workflow_dispatch:
+
+jobs:
+  confirmatory:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install OARL
+        run: pip install -e '.[dev]'
+      - name: Install pinned pyGSTi
+        run: pip install 'pygsti==0.10.2'
+      - name: Run frozen v0.6.4 gate
+        run: python scripts/run_v064_task_aligned_gate.py --out evidence/v064/outputs
+      - name: Verify output integrity
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          data = json.loads(Path('evidence/v064/outputs/summary.json').read_text())
+          assert data['version'] == 'v0.6.4-task-aligned-equivalence'
+          assert data['physical_circuits'] == 254
+          assert data['candidate_views'] == 508
+          assert data['mechanism_probe_count'] == 19
+          assert data['shots_per_split'] == 100000
+          assert data['shortlist_neighbours'] == 8
+          assert set(data['methods']) == {'RAW', 'ORACLE', 'TV-UCB', 'FIM-POINT', 'FIM-UCB', 'OARL-TASK-XFIT'}
+          print('primary_safety_gate_pass =', data['primary_safety_gate_pass'])
+          print('incremental_utility_observed =', data['incremental_utility_observed'])
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: v064-task-aligned-equivalence-evidence
+          path: evidence/v064/outputs
