@@ -29,13 +29,30 @@ def test_metadata_expansion_count_and_scores():
     assert all(c["score_components"] for c in rows)
 
 
-def test_metadata_expansion_sources_are_unique_and_fresh():
+def test_metadata_expansion_sources_are_unique_and_were_fresh_at_selection():
     data = load(EXPANSION)
     registry = load(REGISTRY)
     sources = [c["source"] for c in data["candidates"]]
     assert len(sources) == len(set(sources))
-    assert not set(sources).intersection(c["source"] for c in registry["candidates"])
+    # Promoted expansion cases may now appear in the live registry. Freshness is
+    # therefore checked against the pre-expansion/core lineage only.
+    core_sources = {
+        c["source"]
+        for c in registry["candidates"]
+        if c.get("source_status") != "v07_metadata_expansion"
+    }
+    assert not set(sources).intersection(core_sources)
     assert not set(sources).intersection(registry["prior_oarl_pilot_exclusions"])
+
+
+def test_promoted_expansion_cases_remain_traceable_to_frozen_queue():
+    data = load(EXPANSION)
+    registry = load(REGISTRY)
+    expansion_sources = {c["source"] for c in data["candidates"]}
+    promoted = [c for c in registry["candidates"] if c.get("source_status") == "v07_metadata_expansion"]
+    assert promoted
+    assert all(c["source"] in expansion_sources for c in promoted)
+    assert all(c["oarl_executed"] is False for c in promoted)
 
 
 def test_metadata_expansion_repository_caps_and_breadth():
