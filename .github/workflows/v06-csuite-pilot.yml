@@ -1,0 +1,46 @@
+name: v0.6 CSuite pilot
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'src/oarl_bench/csuite.py'
+      - 'src/oarl_bench/competitive.py'
+      - 'tests/test_csuite_v06.py'
+      - 'tests/test_competitive_v06.py'
+      - 'scripts/run_v06_csuite_pilot.py'
+      - 'external/v06/**'
+      - 'evidence/v06/**'
+      - '.github/workflows/v06-csuite-pilot.yml'
+  push:
+    branches:
+      - main
+    paths:
+      - 'src/oarl_bench/csuite.py'
+      - 'src/oarl_bench/competitive.py'
+      - 'scripts/run_v06_csuite_pilot.py'
+      - 'external/v06/**'
+      - 'evidence/v06/**'
+      - '.github/workflows/v06-csuite-pilot.yml'
+  workflow_dispatch:
+
+jobs:
+  pilot:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install package
+        run: pip install -e '.[dev]'
+      - name: Run unit tests
+        run: pytest -q tests/test_competitive_v06.py tests/test_csuite_v06.py
+      - name: Run CSuite pilot
+        run: python scripts/run_v06_csuite_pilot.py --out evidence/v06/pilot_outputs
+      - name: Upload pilot evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: v06-csuite-pilot
+          path: evidence/v06/pilot_outputs
