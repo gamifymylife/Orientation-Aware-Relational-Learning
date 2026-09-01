@@ -29,6 +29,8 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          rm -rf src/*.egg-info
+          rm -f .github/workflows/tests.yml
           git add -A
           git commit -m "Expand consolidated OARL research archive"
           git push origin HEAD:consolidate-research-evidence
