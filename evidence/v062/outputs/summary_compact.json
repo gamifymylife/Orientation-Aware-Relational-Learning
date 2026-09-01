@@ -1,0 +1,35 @@
+{
+  "version": "v0.6.2-boundary-information-audit",
+  "pygsti_version": "0.10.2",
+  "gate_pass": true,
+  "initial_boundary": {
+    "depth": 1,
+    "rank": 2,
+    "nullity": 1,
+    "eigenvalues": [0.0, 0.99999999666578, 0.99999999666578]
+  },
+  "repeat_rank": {
+    "1": 2,
+    "10": 2,
+    "100": 2,
+    "1000": 2
+  },
+  "repeat_1000_eigenvalues": [0.0, 999.99999666578, 999.99999666578],
+  "expanded_boundary": {
+    "probe_count": 126,
+    "rank": 3,
+    "eigenvalues": [32.42781643631389, 167.57217383706296, 333.99998271665214]
+  },
+  "selection": {
+    "d_optimal": {"new_circuits": 1, "added_depth_cost": 2, "selected": "Gxpi2.Gypi2", "final_rank": 3},
+    "nullspace_coverage": {"new_circuits": 1, "added_depth_cost": 2, "selected": "Gxpi2.Gypi2", "final_rank": 3},
+    "e_optimal": {"new_circuits": 1, "added_depth_cost": 3, "selected": "Gxpi2.Gypi2.Gypi2", "final_rank": 3},
+    "cosine_diversity": {"new_circuits": 1, "added_depth_cost": 3, "selected": "Gxpi2.Gypi2.Gypi2", "final_rank": 3},
+    "random_new_view": {"new_circuits": 1, "added_depth_cost": 6, "final_rank": 3},
+    "repeat_only_x1000": {"new_circuits": 0, "added_depth_cost": 1998, "final_rank": 2}
+  },
+  "interpretation": "Fixed-boundary repetition increased information magnitude but not span. One new depth-2 probe completed rank. Null-space coverage tied, but did not beat, D-optimality; therefore no OARL-specific measurement-selection advantage is established.",
+  "workflow_run": 33508205671,
+  "artifact_id": 9800489097,
+  "artifact_sha256": "c69db391b0f68155226f08a1e4b7e118ca4005cfd8d21d57a7f2afeb10bf9d11"
+}
