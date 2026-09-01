@@ -1,0 +1,44 @@
+name: v0.6.1 finite-shot competitive gate
+
+on:
+  pull_request:
+    paths:
+      - 'scripts/run_v061_finite_shot_gate.py'
+      - 'evidence/v061/FINITE_SHOT_PREREGISTRATION.md'
+      - '.github/workflows/v061-finite-shot.yml'
+  workflow_dispatch:
+
+jobs:
+  confirmatory:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install OARL
+        run: pip install -e '.[dev]'
+      - name: Install pinned external tomography implementation
+        run: pip install 'pygsti==0.10.2'
+      - name: Run frozen finite-shot competitive gate
+        run: python scripts/run_v061_finite_shot_gate.py --out evidence/v061/finite_shot_outputs
+      - name: Verify confirmatory output integrity
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p = Path('evidence/v061/finite_shot_outputs/summary.json')
+          data = json.loads(p.read_text())
+          assert data['seed_range'] == [1000, 1299]
+          assert data['n_rows'] == 9600
+          assert data['shot_budgets'] == [50000, 100000, 250000, 500000]
+          assert data['discovery_circuits'] == 15
+          assert data['sealed_circuits'] == 112
+          print('science gate_pass =', data['gate_pass'])
+          PY
+      - name: Upload finite-shot evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: v061-finite-shot-evidence
+          path: evidence/v061/finite_shot_outputs
