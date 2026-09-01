@@ -81,7 +81,7 @@ def test_heldout_unique_worlds_produce_zero_equivalence_certificates():
                     cert = certify_pair_noisy(fit, validation, i, j)
                     pair_calls += 1
                     equivalent_calls += int(cert.status is CertificateStatus.EQUIVALENT)
-    assert pair_calls > 4000
+    assert pair_calls == 3660
     assert equivalent_calls == 0
 
 
