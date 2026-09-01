@@ -1,0 +1,10 @@
+{
+  "study": "OARL v0.7 External Complementarity Gate",
+  "phase": "CORPUS_CONSTRUCTION_PRE_OARL",
+  "target_cases": 24,
+  "minimum_cases_to_launch": 20,
+  "oarl_external_outcomes_executed": false,
+  "confirmation_lock_created": false,
+  "selection_protocol": "evidence/v07/external/SELECTION_PROTOCOL.md",
+  "candidates": []
+}
