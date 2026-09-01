@@ -84,7 +84,7 @@ No threshold may be changed after confirmatory output. A changed method becomes 
 
 ## Downstream comparison
 
-Every quotient is passed to the **same greedy D-optimal selector**. Representatives are chosen deterministically as the lowest-cost member of each learned class. For the selected representative set, evaluator-side exact FIMs are used only to score the downstream scientific outcome.
+Every quotient is passed to the **same greedy D-optimal selector with replacement**. Keeping replacement is important: quotienting equivalent experiment *types* must not remove the ability to allocate repeated measurements to the selected type. Representatives are chosen deterministically as the lowest-cost member of each learned class. For the selected representative sequence, evaluator-side exact FIMs are used only to score the downstream scientific outcome.
 
 Report for every method:
 
