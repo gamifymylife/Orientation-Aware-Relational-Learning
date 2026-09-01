@@ -44,8 +44,10 @@ The remaining CSuite systems are reserved until that protocol is frozen.
 - system identifier;
 - candidate view identifier;
 - discovery-half primary and reference samples;
-- normalized intervention-response signature;
+- intervention-minus-reference response signature in CSuite's published node coordinates;
 - uncertainty estimate.
+
+The neutral adapter deliberately does **not** standardize each response coordinate by split- or view-specific variance. The first CI fixture exposed that such independent coordinate-wise scaling can destroy a genuine global affine relation. Any competitor-level normalization must therefore be explicit, frozen and applied by that competitor rather than silently built into the shared evidence representation.
 
 The holdout arrays and upstream intervention/effect/conditioning metadata remain evaluator-side. Ground-truth graph/SEM information is never supplied to OARL or non-oracle baselines during discovery.
 
