@@ -1,0 +1,31 @@
+name: v0.6.1 pyGSTi gauge smoke
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'scripts/run_v061_pygsti_smoke.py'
+      - 'evidence/v061/**'
+      - '.github/workflows/v061-pygsti-smoke.yml'
+  workflow_dispatch:
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install OARL
+        run: pip install -e '.[dev]'
+      - name: Install pinned external tomography implementation
+        run: pip install 'pygsti==0.10.2'
+      - name: Run pyGSTi gauge-equivalence smoke gate
+        run: python scripts/run_v061_pygsti_smoke.py --out evidence/v061/smoke_outputs
+      - name: Upload smoke evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: v061-pygsti-smoke
+          path: evidence/v061/smoke_outputs
