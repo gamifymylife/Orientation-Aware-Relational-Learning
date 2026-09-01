@@ -1,0 +1,13 @@
+{
+  "rows": 6912,
+  "oarl_resolvable_accuracy": 1,
+  "oarl_unknown_rate_insufficiency": 1,
+  "oarl_mean_probes_resolvable": 1.6,
+  "exhaustive_mean_probes_resolvable": 3.6,
+  "probe_reduction_vs_exhaustive": 0.5555555555555556,
+  "xor_oarl_mean_probes": 2,
+  "xor_active_decision_mean_probes": 3,
+  "xor_two_step_mean_probes": 2,
+  "redundancy_oarl_planning_evals": 3,
+  "redundancy_no_transport_planning_evals": 6
+}
