@@ -1,11 +1,23 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "case_id": "REPLACE",
   "source": "owner/repo#pr",
   "status": "UNRUN",
   "repository": "owner/repo",
   "pre_fix_revision": "40_HEX",
   "post_fix_revision": "40_HEX",
+  "evidence_tracks": {
+    "regression_search_R": true,
+    "decision_complete_D": false
+  },
+  "hypothesis_family": {
+    "required_for_track_D": true,
+    "source_kind": "NONE_OR_FROZEN_EXTERNAL_OR_MECHANICAL",
+    "mechanism_count": 0,
+    "decision_count": 0,
+    "manifest_sha256": null,
+    "decision_map_sha256": null
+  },
   "common_interface": {
     "description": "",
     "python": "3.11",
@@ -40,11 +52,13 @@
     "changed_files_available_to_policy": false,
     "known_witness_available_to_policy": false,
     "evaluator_labels_available_to_policy": false,
-    "semantic_bug_labels_available_to_policy": false
+    "semantic_bug_labels_available_to_policy": false,
+    "curator_authored_hypotheses_available_to_policy": false
   },
   "oarl_executed": false,
   "admission": {
-    "eligible": false,
+    "eligible_track_R": false,
+    "eligible_track_D": false,
     "reason": "UNRUN"
   }
 }
