@@ -1,12 +1,12 @@
 """Precision-first finite-noise orientation certification for OARL v0.5B.
 
 This module deliberately does not read hidden orientation classes or transport
-metadata.  It asks whether an affine/permutation transport can be supported by
+metadata. It asks whether an affine/permutation transport can be supported by
 finite predictive evidence from the candidate likelihood family.
 
-The safety asymmetry is intentional: false merges are treated as substantially
-more dangerous than missed compression.  Therefore low-signal, unstable or
-ambiguous pairs return UNKNOWN and are never quotiented.
+The safety asymmetry is intentional: false merges are substantially more
+dangerous than missed compression. Low-signal, assignment-ambiguous, unstable,
+or weakly validated pairs therefore return UNKNOWN and are never quotiented.
 """
 
 from __future__ import annotations
@@ -42,6 +42,7 @@ class NoisyPairCertificate:
     signal_target_z: float
     signal_reference_z: float
     assignment_max_distance: float
+    assignment_min_gap: float
     validation_upper_z: float
     validation_lower_z: float
     sigma_upper_log_error: float
@@ -92,6 +93,7 @@ class _Proposal:
     signal_target_z: float
     signal_reference_z: float
     assignment_max_distance: float
+    assignment_min_gap: float
 
 
 def draw_predictive_summary(
@@ -102,9 +104,9 @@ def draw_predictive_summary(
     """Draw exact Gaussian sufficient statistics without materializing all samples.
 
     For Normal(mu, sigma), sample mean and sample variance are independent with
-    known sampling distributions.  Drawing those sufficient statistics is
+    known sampling distributions. Drawing those sufficient statistics is
     exactly equivalent, for this certifier, to drawing n_samples IID values and
-    then reducing them to mean and standard deviation.
+    reducing them to mean and standard deviation.
     """
 
     if n_samples < 3:
@@ -134,6 +136,7 @@ def _proposal(
     sd_reference: np.ndarray,
     *,
     min_signal_z: float,
+    min_assignment_gap: float,
 ) -> _Proposal | None:
     mt = np.asarray(means_target, dtype=float)
     mr = np.asarray(means_reference, dtype=float)
@@ -144,7 +147,7 @@ def _proposal(
     if st.shape != mt.shape or sr.shape != mr.shape:
         raise ValueError("sample standard deviations must share H x A shape")
 
-    H, A = mt.shape
+    _, A = mt.shape
     ut, nt, ct = _unit_signatures(mt)
     ur, nr, cr = _unit_signatures(mr)
     pooled_t = np.sqrt(np.mean(st * st, axis=0))
@@ -166,6 +169,19 @@ def _proposal(
     mapping = np.empty(A, dtype=int)
     mapping[rows] = cols
 
+    gaps = []
+    for a in range(A):
+        matched = float(distance[a, mapping[a]])
+        if A == 1:
+            gap = float("inf")
+        else:
+            alternatives = np.delete(distance[a], mapping[a])
+            gap = float(np.min(alternatives) - matched)
+        gaps.append(gap)
+    assignment_min_gap = float(np.min(gaps))
+    if assignment_min_gap < min_assignment_gap:
+        return None
+
     valid_scale = (nt > 1e-10) & (nr[mapping] > 1e-10)
     if int(np.sum(valid_scale)) < max(2, A // 2):
         return None
@@ -184,6 +200,7 @@ def _proposal(
         signal_target_z=signal_t,
         signal_reference_z=signal_r,
         assignment_max_distance=assignment_max,
+        assignment_min_gap=assignment_min_gap,
     )
 
 
@@ -205,6 +222,7 @@ def _empty_certificate(
         signal_target_z=float("nan"),
         signal_reference_z=float("nan"),
         assignment_max_distance=float("inf"),
+        assignment_min_gap=float("-inf"),
         validation_upper_z=float("inf"),
         validation_lower_z=0.0,
         sigma_upper_log_error=float("inf"),
@@ -224,6 +242,7 @@ def certify_pair_noisy(
     reference: int,
     *,
     min_signal_z: float = 0.12,
+    min_assignment_gap: float = 0.01,
     equivalence_margin_z: float = 0.55,
     sigma_relative_margin: float = 0.25,
     assignment_margin: float = 0.40,
@@ -234,13 +253,11 @@ def certify_pair_noisy(
 ) -> NoisyPairCertificate:
     """Cross-fit a conservative finite-noise equivalence certificate.
 
-    EQUIVALENT requires all of the following:
-    - useful mechanism signal in both orientations;
-    - the same intervention bijection on independent fit/validation samples;
-    - reverse-direction fits recover the exact inverse bijection;
-    - stable and reciprocal affine parameters;
-    - simultaneous validation confidence bounds inside equivalence_margin_z;
-    - pooled predictive noise scales agree inside sigma_relative_margin.
+    EQUIVALENT requires useful mechanism signal, a non-ambiguous intervention
+    assignment, replication of the same bijection on an independent validation
+    sample, exact inverse recovery in both reverse fits, stable/reciprocal affine
+    parameters, simultaneous response confidence bounds inside the equivalence
+    envelope, and compatible predictive noise scales.
 
     Failure of an equivalence condition normally yields UNKNOWN, not DISTINCT.
     DISTINCT is reserved for a stable mapping whose validation residual is
@@ -259,30 +276,35 @@ def certify_pair_noisy(
 
     n = fit.n_samples
     comparisons = int(4 * H * A * A + H * A)
+    proposal_kwargs = {
+        "min_signal_z": min_signal_z,
+        "min_assignment_gap": min_assignment_gap,
+    }
     pf = _proposal(
         fit.mean[:, target, :], fit.sd[:, target, :],
         fit.mean[:, reference, :], fit.sd[:, reference, :],
-        min_signal_z=min_signal_z,
+        **proposal_kwargs,
     )
     pv = _proposal(
         validation.mean[:, target, :], validation.sd[:, target, :],
         validation.mean[:, reference, :], validation.sd[:, reference, :],
-        min_signal_z=min_signal_z,
+        **proposal_kwargs,
     )
     prf = _proposal(
         fit.mean[:, reference, :], fit.sd[:, reference, :],
         fit.mean[:, target, :], fit.sd[:, target, :],
-        min_signal_z=min_signal_z,
+        **proposal_kwargs,
     )
     prv = _proposal(
         validation.mean[:, reference, :], validation.sd[:, reference, :],
         validation.mean[:, target, :], validation.sd[:, target, :],
-        min_signal_z=min_signal_z,
+        **proposal_kwargs,
     )
     if any(p is None for p in (pf, pv, prf, prv)):
         return _empty_certificate(
             target, reference, CertificateStatus.UNKNOWN,
-            "insufficient mechanism signal or unstable scale", A, comparisons,
+            "insufficient signal, unstable scale, or ambiguous intervention assignment",
+            A, comparisons,
         )
     assert pf is not None and pv is not None and prf is not None and prv is not None
 
@@ -304,6 +326,12 @@ def certify_pair_noisy(
         pv.assignment_max_distance,
         prf.assignment_max_distance,
         prv.assignment_max_distance,
+    ))
+    assignment_min_gap_observed = float(min(
+        pf.assignment_min_gap,
+        pv.assignment_min_gap,
+        prf.assignment_min_gap,
+        prv.assignment_min_gap,
     ))
     scale_stability = float(abs(pv.scale - pf.scale) / max(abs(pf.scale), 1e-12))
     scale_reciprocity = float(max(
@@ -344,6 +372,7 @@ def certify_pair_noisy(
 
     equivalent = (
         assignment_max <= assignment_margin
+        and assignment_min_gap_observed >= min_assignment_gap
         and scale_stability <= scale_stability_margin
         and scale_reciprocity <= scale_stability_margin
         and offset_stability <= offset_stability_margin_z
@@ -372,6 +401,7 @@ def certify_pair_noisy(
         signal_target_z=float(pf.signal_target_z),
         signal_reference_z=float(pf.signal_reference_z),
         assignment_max_distance=assignment_max,
+        assignment_min_gap=assignment_min_gap_observed,
         validation_upper_z=validation_upper,
         validation_lower_z=validation_lower,
         sigma_upper_log_error=sigma_upper,
@@ -426,9 +456,7 @@ def discover_noisy_structure(
         for c, rep in enumerate(reps):
             if not adm[rep]:
                 continue
-            cert = certify_pair_noisy(
-                fit, validation, o, rep, **certificate_kwargs
-            )
+            cert = certify_pair_noisy(fit, validation, o, rep, **certificate_kwargs)
             certificates.append(cert)
             comparisons += cert.comparisons
             if cert.status is CertificateStatus.EQUIVALENT:
