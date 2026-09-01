@@ -1,0 +1,20 @@
+{
+  "8": {
+    "paired_seeds": 5,
+    "median_runtime_reduction": 0.5193177145521407,
+    "min_runtime_reduction": 0.4354681547998611,
+    "max_runtime_reduction": 0.5482549274924713
+  },
+  "16": {
+    "paired_seeds": 5,
+    "median_runtime_reduction": 0.7300537665826542,
+    "min_runtime_reduction": 0.668069549526099,
+    "max_runtime_reduction": 0.7883847114565876
+  },
+  "24": {
+    "paired_seeds": 5,
+    "median_runtime_reduction": 0.8376815006044908,
+    "min_runtime_reduction": 0.8157864039871309,
+    "max_runtime_reduction": 0.8495948705904235
+  }
+}

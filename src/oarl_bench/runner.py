@@ -26,6 +26,20 @@ POLICIES = [
 
 def run_episode(cfg: BenchmarkConfig, seed: int, policy: str) -> dict:
     world = generate_world(cfg, seed)
+    return run_episode_on_world(cfg, seed, policy, world)
+
+
+def run_episode_on_world(
+    cfg: BenchmarkConfig,
+    seed: int,
+    policy: str,
+    world,
+) -> dict:
+    """Run one episode on a supplied world.
+
+    v0.5 uses this to compare the same hidden world under generic, oracle-structure
+    and discovered-structure policies without regenerating the benchmark.
+    """
     obs_rng = np.random.default_rng(seed * 10007 + 12345)
     policy_rng = np.random.default_rng(seed * 10007 + sum(map(ord, policy)))
     posterior = np.full(world.n_mechanisms, 1.0 / world.n_mechanisms)

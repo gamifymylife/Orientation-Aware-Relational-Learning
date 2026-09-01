@@ -1,0 +1,9 @@
+{
+  "runs_discovered": 120,
+  "false_merge_pairs": 0,
+  "min_pair_precision": 1.0,
+  "min_pair_recall": 1.0,
+  "paired_outcome_match_rate": 1.0,
+  "median_score_eval_reduction": 0.75,
+  "median_runtime_reduction_vs_generic": 0.3215043251079088
+}
