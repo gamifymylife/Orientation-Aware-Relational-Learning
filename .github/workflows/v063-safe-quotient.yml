@@ -1,0 +1,44 @@
+name: v0.6.3 safe quotient gate
+
+on:
+  pull_request:
+    paths:
+      - 'scripts/run_v063_safe_quotient_gate.py'
+      - 'evidence/v063/**'
+      - '.github/workflows/v063-safe-quotient.yml'
+  workflow_dispatch:
+
+jobs:
+  confirmatory:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install OARL
+        run: pip install -e '.[dev]'
+      - name: Install pinned pyGSTi
+        run: pip install 'pygsti==0.10.2'
+      - name: Run frozen v0.6.3 gate
+        run: python scripts/run_v063_safe_quotient_gate.py --out evidence/v063/outputs
+      - name: Verify output integrity
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          data = json.loads(Path('evidence/v063/outputs/summary.json').read_text())
+          assert data['version'] == 'v0.6.3-safe-quotient-gate'
+          assert data['physical_circuits'] == 254
+          assert data['candidate_views'] == 508
+          assert data['mechanism_probe_count'] == 19
+          assert data['shots_per_split'] == 50000
+          assert data['shortlist_neighbours'] == 4
+          assert set(data['learned']) == {'POINT', 'UCB', 'OARL-XFIT'}
+          print('primary_safety_gate_pass =', data['primary_safety_gate_pass'])
+          print('incremental_utility_observed =', data['incremental_utility_observed'])
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: v063-safe-quotient-evidence
+          path: evidence/v063/outputs
