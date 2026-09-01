@@ -1,0 +1,90 @@
+{
+  "aggregate": {
+    "generic": {
+      "abstention_rate": 0.004375,
+      "accepted_equivalent": 4758,
+      "fn_equivalent_called_distinct": 0,
+      "fp_operational_false_merge": 1191,
+      "operational_precision": 0.7496847414880202,
+      "operational_recall": 0.9908333333333333,
+      "physical_false_merges": 3566,
+      "tn_distinct": 4800,
+      "tp_equivalent": 3567,
+      "unknown": 42
+    },
+    "oarl": {
+      "abstention_rate": 0.16947916666666665,
+      "accepted_equivalent": 3173,
+      "fn_equivalent_called_distinct": 0,
+      "fp_operational_false_merge": 522,
+      "operational_precision": 0.835486920895052,
+      "operational_recall": 0.7363888888888889,
+      "physical_false_merges": 2285,
+      "tn_distinct": 4800,
+      "tp_equivalent": 2651,
+      "unknown": 1627
+    },
+    "raw": {
+      "abstention_rate": 0.0,
+      "accepted_equivalent": 0,
+      "fn_equivalent_called_distinct": 3600,
+      "fp_operational_false_merge": 0,
+      "operational_precision": null,
+      "operational_recall": 0.0,
+      "physical_false_merges": 0,
+      "tn_distinct": 6000,
+      "tp_equivalent": 0,
+      "unknown": 0
+    }
+  },
+  "alpha": 0.01,
+  "by_budget": {
+    "100000": {
+      "generic": {"abstention_rate": 0.0, "accepted_equivalent": 1200, "fn_equivalent_called_distinct": 0, "fp_operational_false_merge": 300, "operational_precision": 0.75, "operational_recall": 1.0, "physical_false_merges": 900, "tn_distinct": 1200, "tp_equivalent": 900, "unknown": 0},
+      "oarl": {"abstention_rate": 0.12125, "accepted_equivalent": 909, "fn_equivalent_called_distinct": 0, "fp_operational_false_merge": 58, "operational_precision": 0.9361936193619362, "operational_recall": 0.9455555555555556, "physical_false_merges": 621, "tn_distinct": 1200, "tp_equivalent": 851, "unknown": 291},
+      "raw": {"abstention_rate": 0.0, "accepted_equivalent": 0, "fn_equivalent_called_distinct": 900, "fp_operational_false_merge": 0, "operational_precision": null, "operational_recall": 0.0, "physical_false_merges": 0, "tn_distinct": 1500, "tp_equivalent": 0, "unknown": 0}
+    },
+    "250000": {
+      "generic": {"abstention_rate": 0.0, "accepted_equivalent": 1200, "fn_equivalent_called_distinct": 0, "fp_operational_false_merge": 300, "operational_precision": 0.75, "operational_recall": 1.0, "physical_false_merges": 900, "tn_distinct": 1200, "tp_equivalent": 900, "unknown": 0},
+      "oarl": {"abstention_rate": 0.049166666666666664, "accepted_equivalent": 1082, "fn_equivalent_called_distinct": 0, "fp_operational_false_merge": 182, "operational_precision": 0.8317929759704251, "operational_recall": 1.0, "physical_false_merges": 782, "tn_distinct": 1200, "tp_equivalent": 900, "unknown": 118},
+      "raw": {"abstention_rate": 0.0, "accepted_equivalent": 0, "fn_equivalent_called_distinct": 900, "fp_operational_false_merge": 0, "operational_precision": null, "operational_recall": 0.0, "physical_false_merges": 0, "tn_distinct": 1500, "tp_equivalent": 0, "unknown": 0}
+    },
+    "50000": {
+      "generic": {"abstention_rate": 0.0175, "accepted_equivalent": 1158, "fn_equivalent_called_distinct": 0, "fp_operational_false_merge": 291, "operational_precision": 0.7487046632124352, "operational_recall": 0.9633333333333334, "physical_false_merges": 866, "tn_distinct": 1200, "tp_equivalent": 867, "unknown": 42},
+      "oarl": {"abstention_rate": 0.5, "accepted_equivalent": 0, "fn_equivalent_called_distinct": 0, "fp_operational_false_merge": 0, "operational_precision": null, "operational_recall": 0.0, "physical_false_merges": 0, "tn_distinct": 1200, "tp_equivalent": 0, "unknown": 1200},
+      "raw": {"abstention_rate": 0.0, "accepted_equivalent": 0, "fn_equivalent_called_distinct": 900, "fp_operational_false_merge": 0, "operational_precision": null, "operational_recall": 0.0, "physical_false_merges": 0, "tn_distinct": 1500, "tp_equivalent": 0, "unknown": 0}
+    },
+    "500000": {
+      "generic": {"abstention_rate": 0.0, "accepted_equivalent": 1200, "fn_equivalent_called_distinct": 0, "fp_operational_false_merge": 300, "operational_precision": 0.75, "operational_recall": 1.0, "physical_false_merges": 900, "tn_distinct": 1200, "tp_equivalent": 900, "unknown": 0},
+      "oarl": {"abstention_rate": 0.0075, "accepted_equivalent": 1182, "fn_equivalent_called_distinct": 0, "fp_operational_false_merge": 282, "operational_precision": 0.7614213197969543, "operational_recall": 1.0, "physical_false_merges": 882, "tn_distinct": 1200, "tp_equivalent": 900, "unknown": 18},
+      "raw": {"abstention_rate": 0.0, "accepted_equivalent": 0, "fn_equivalent_called_distinct": 900, "fp_operational_false_merge": 0, "operational_precision": null, "operational_recall": 0.0, "physical_false_merges": 0, "tn_distinct": 1500, "tp_equivalent": 0, "unknown": 0}
+    }
+  },
+  "checks": {
+    "competitive_advantage_observed": true,
+    "competitive_comparison_has_accepts": true,
+    "oarl_all_accepted_respect_sealed_epsilon": false,
+    "oarl_operational_recall_ge_0_20": true,
+    "oarl_zero_operational_false_merges": false
+  },
+  "claim_boundary": "Operational epsilon-equivalence under finite-shot shallow-circuit evidence; not proof of physical identity or a new GST result.",
+  "depth_slope_limit": 0.002,
+  "discovery_circuits": 15,
+  "epsilon": 0.02,
+  "gate_pass": false,
+  "n_rows": 9600,
+  "pygsti_version": "0.10.2",
+  "sealed_circuits": 112,
+  "sealed_max_abs_by_op_noise": {
+    "0.002": 0.005970079880096069,
+    "0.005": 0.0148137453218673,
+    "0.01": 0.02925992529950011,
+    "0.02": 0.057078809568000044,
+    "0.03": 0.08351399753550004,
+    "0.05": 0.1324540546875001,
+    "0.08": 0.19682249932800006
+  },
+  "seed_range": [1000, 1299],
+  "shot_budgets": [50000, 100000, 250000, 500000],
+  "version": "v0.6.1-finite-shot"
+}
