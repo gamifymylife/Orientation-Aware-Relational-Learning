@@ -34,6 +34,11 @@ def validate_preflight(doc: dict) -> list[str]:
         errors.append(f"{cid}: invalid post-fix revision")
     if doc.get("pre_fix_revision") == doc.get("post_fix_revision"):
         errors.append(f"{cid}: identical A/B revisions")
+
+    tracks = doc.get("evidence_tracks", {})
+    if tracks.get("regression_search_R") is not True:
+        errors.append(f"{cid}: Track R must be explicit for this corpus")
+
     replay = doc.get("historical_replay", {})
     if replay.get("stable_pre_fix_repeats", 0) < 3 or replay.get("stable_post_fix_repeats", 0) < 3:
         errors.append(f"{cid}: fewer than three stable A/B repeats")
@@ -41,6 +46,7 @@ def validate_preflight(doc: dict) -> list[str]:
         errors.append(f"{cid}: common-interface requirement failed")
     if replay.get("negative_control_pass") is not True:
         errors.append(f"{cid}: negative control failed or absent")
+
     space = doc.get("candidate_space", {})
     if space.get("experiment_count", 0) < 1 or space.get("orientation_count", 0) < 1:
         errors.append(f"{cid}: empty experiment/orientation space")
@@ -48,9 +54,11 @@ def validate_preflight(doc: dict) -> list[str]:
         errors.append(f"{cid}: validity rate below 0.80")
     if not HEX64.fullmatch(str(space.get("manifest_sha256", ""))):
         errors.append(f"{cid}: candidate-space manifest not hash frozen")
+
     for key in ("adapter_sha256", "evaluator_sha256", "relation_generator_sha256"):
         if not HEX64.fullmatch(str(doc.get("frozen_artifacts", {}).get(key, ""))):
             errors.append(f"{cid}: {key} not frozen")
+
     leak = doc.get("leakage_checks", {})
     forbidden = (
         "pr_text_available_to_policy",
@@ -58,9 +66,32 @@ def validate_preflight(doc: dict) -> list[str]:
         "known_witness_available_to_policy",
         "evaluator_labels_available_to_policy",
         "semantic_bug_labels_available_to_policy",
+        "curator_authored_hypotheses_available_to_policy",
     )
     if any(leak.get(k) is not False for k in forbidden):
         errors.append(f"{cid}: policy leakage boundary failed")
+
+    admission = doc.get("admission", {})
+    if admission.get("eligible_track_D") is True:
+        if tracks.get("decision_complete_D") is not True:
+            errors.append(f"{cid}: Track-D admission without Track-D declaration")
+        h = doc.get("hypothesis_family", {})
+        if h.get("source_kind") not in {
+            "EXTERNALLY_AUTHORED",
+            "MECHANICAL_PERTURBATION",
+            "FROZEN_SIMULATOR",
+            "PROSPECTIVE_FAULT_FAMILY",
+        }:
+            errors.append(f"{cid}: inadmissible Track-D hypothesis source")
+        if int(h.get("mechanism_count", 0)) < 3:
+            errors.append(f"{cid}: Track D requires a nontrivial multi-hypothesis family")
+        if int(h.get("decision_count", 0)) < 2:
+            errors.append(f"{cid}: Track D requires at least two task decisions")
+        if not HEX64.fullmatch(str(h.get("manifest_sha256", ""))):
+            errors.append(f"{cid}: Track-D mechanism family not hash frozen")
+        if not HEX64.fullmatch(str(h.get("decision_map_sha256", ""))):
+            errors.append(f"{cid}: Track-D decision map not hash frozen")
+
     return errors
 
 
@@ -87,14 +118,17 @@ def main() -> int:
             preflights.append(doc)
             errors.extend(validate_preflight(doc))
 
-    eligible = [d for d in preflights if d.get("admission", {}).get("eligible") is True]
+    eligible_r = [d for d in preflights if d.get("admission", {}).get("eligible_track_R") is True]
+    eligible_d = [d for d in preflights if d.get("admission", {}).get("eligible_track_D") is True]
     report = {
         "phase": data["phase"],
         "candidate_entries": len(data["candidates"]),
         "preflight_manifests": len(preflights),
-        "eligible_preflights": len(eligible),
-        "minimum_cases_to_launch": data["minimum_cases_to_launch"],
-        "ready_to_lock": len(eligible) >= data["minimum_cases_to_launch"] and not errors,
+        "eligible_track_R": len(eligible_r),
+        "eligible_track_D": len(eligible_d),
+        "minimum_track_R_cases_to_launch": data["minimum_cases_to_launch"],
+        "ready_to_lock_track_R": len(eligible_r) >= data["minimum_cases_to_launch"] and not errors,
+        "track_D_is_reported_separately": True,
         "registry_sha256": sha256_file(REGISTRY),
         "errors": errors,
     }
