@@ -13,6 +13,16 @@ on:
       - 'external/v06/**'
       - 'evidence/v06/**'
       - '.github/workflows/v06-csuite-pilot.yml'
+  push:
+    branches:
+      - main
+    paths:
+      - 'src/oarl_bench/csuite.py'
+      - 'src/oarl_bench/competitive.py'
+      - 'scripts/run_v06_csuite_pilot.py'
+      - 'external/v06/**'
+      - 'evidence/v06/**'
+      - '.github/workflows/v06-csuite-pilot.yml'
   workflow_dispatch:
 
 jobs:
