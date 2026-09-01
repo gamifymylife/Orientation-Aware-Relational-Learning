@@ -20,13 +20,34 @@ The programme has changed materially as evidence accumulated. The original speci
 | v0.6 CSuite | Is CSuite suitable as an external equivalence-discovery benchmark? | The tested published systems expose too few candidate intervention views for a serious pairwise equivalence gate. | **Suitability failure preserved** |
 | v0.6.1 pyGSTi smoke | Does an independent domain contain the target phenomenon? | Gauge transformations materially change internal representation while preserving all tested circuit probabilities; physical perturbations change them. | **External phenomenon confirmed; not OARL-specific utility** |
 | v0.6.1 finite-shot | Can shallow finite-shot OARL certification safely generalize equivalence to unseen deeper circuits? | OARL improved precision vs direct probability equivalence but still made **522 sealed operational false merges**. More shots increased the boundary failure. | **Primary safety gate failed** |
+| v0.6.2 | Does repeating a fixed boundary add missing information directions? | Fisher magnitude grew under repetition but rank stayed 2/3; one new depth-2 circuit completed rank. Generic D-optimality tied the OARL selector. | **Boundary result supported; no OARL advantage** |
+| v0.6.3 | Can response-level quotienting safely reduce a fixed downstream D-optimal search? | OARL compressed 42.5% but accepted 555 task-false merges. | **Safety gate failed** |
+| v0.6.4 | Can direct finite-Fisher certification repair safety? | Zero evaluator-defined false merges but zero compression at a nominal 1.9304B view-shot cost. Its finite-difference oracle was later shown to fragment exact zero-Fisher classes. | **Utility gate failed; evaluator interpretation corrected** |
+| v0.6.5 | Does learned opportunity remain after known canonicalization and analytic structural transport? | Held-out depth 8: `512 views -> 256 physical circuits -> 50 exact classes`, identical D-optimality, zero Bernoulli shots. The operational oracle was also 50 classes. | **Generic structural baseline passed; learned-discovery suitability failed** |
 | DREAM4 | Does intervention identity carry directed mechanism information on a third-party executable benchmark? | Official Size100 confirmatory gate not yet run. | **Pending** |
 
 ## Strongest current claim
 
-> A fixed observational boundary can hide mechanism distinctions that become visible under another legitimate boundary. In an independently authored gate-set tomography domain, internally different gauge representations can be observationally equivalent, while a physically distinct model can look epsilon-equivalent on shallow circuits yet violate the same epsilon criterion on deeper circuits. The current OARL finite-shot certificate reduces false merges relative to direct shallow probability comparison, but it does **not** yet safely extrapolate equivalence beyond the boundary on which it was certified.
+> A fixed observational boundary can hide mechanism distinctions that become visible under another legitimate boundary. Exact, task-preserving orientation structure can also remove substantial redundant experimental computation when that structure is known. However, no external benchmark currently demonstrates that an OARL-specific learner can discover a useful safe quotient more effectively than generic structural canonicalization or established optimal-design machinery.
 
 That is deliberately narrower than claiming a general causal-discovery or equivalence-discovery algorithm.
+
+## v0.6.5 decisive structural audit
+
+The preregistered held-out depth-8 gate separated known outcome relabelling from physical-circuit compression and replaced the numerically unstable finite-difference oracle with exact analytic `SO(3)` transport.
+
+| Method | Classes | Compression beyond physical baseline | D-opt logdet | Score evaluations | Bernoulli shots |
+|---|---:|---:|---:|---:|---:|
+| RAW-VIEWS | 512 | — | 12.3273695 | 4,096 | 0 |
+| VIEW-CANONICAL | 256 | 0.00% | 12.3273695 | 2,048 | 0 |
+| STRUCTURAL-TRANSPORT | **50** | **80.47%** | **12.3273695** | **400** | **0** |
+| OPERATIONAL-ORACLE | **50** | **80.47%** | **12.3273695** | **400** | 0 |
+
+Generic model-based structural transport exactly exhausted the oracle opportunity. The planned adaptive learned stage was therefore not run: there was no nontrivial residual target on which OARL could establish incremental utility.
+
+The same audit corrected two v0.6.4 interpretations. Its “exact” oracle was a central finite-difference evaluator that split exact zero-Fisher classes, and its 1.9304B shot count treated deterministic ordinary/complement relabellings as independent physical experiments. The frozen v0.6.4 result remains preserved, with the correction documented separately.
+
+See [`evidence/v065/V065_RESULT.md`](evidence/v065/V065_RESULT.md) and [`evidence/v064/EVALUATOR_CORRECTION_NOTE.md`](evidence/v064/EVALUATOR_CORRECTION_NOTE.md).
 
 ## v0.6.1 external finite-shot result
 
@@ -69,6 +90,8 @@ See [`evidence/v05b/V05B_CONFIRMATORY_REPORT.md`](evidence/v05b/V05B_CONFIRMATOR
 - Physical identity cannot be inferred from finite operational equivalence with a nonzero epsilon.
 - Learned-representation generalization has not yet been demonstrated.
 - End-to-end savings for finite-noise certification, including certificate acquisition cost, have not yet been demonstrated against exhaustive Generic OED.
+- v0.6.5 does not establish learned equivalence discovery: its successful method uses public model structure and is a generic analytic baseline.
+- The pyGSTi circuit family is not a valid remaining test of OARL-specific learned quotient discovery once known analytic transport is admitted.
 - The official DREAM4 Size100 confirmatory gate remains pending.
 
 ## Repository map
@@ -87,6 +110,10 @@ evidence/v05/             exact structure-discovery evidence
 evidence/v05b/            finite-noise preregistration, failed pilot note and confirmatory evidence
 evidence/v06/             CSuite external adapter/suitability evidence
 evidence/v061/            pyGSTi smoke + finite-shot external boundary evidence
+evidence/v062/            Fisher information-span audit
+evidence/v063/            frozen response-level safe-quotient failure
+evidence/v064/            frozen task-aligned gate plus evaluator correction
+evidence/v065/            structural-baseline and evaluator audit
 external/historical/      Meselson–Stahl and Luria–Delbrück replay
 external/dream4/v01/      original frozen DREAM4 harness
 external/dream4/v02/      preregistration-aligned corrected harness
@@ -112,6 +139,10 @@ For the external pyGSTi gate:
 python -m pip install 'pygsti==0.10.2'
 python scripts/run_v061_pygsti_smoke.py
 python scripts/run_v061_finite_shot_gate.py
+python scripts/run_v062_boundary_information_audit.py
+python scripts/run_v063_safe_quotient_gate.py
+python scripts/run_v064_task_aligned_gate.py
+python scripts/run_v065_structural_baseline_audit.py
 ```
 
 For DREAM4:
@@ -123,10 +154,10 @@ python external/dream4/v02/run_dream4_gate.py --root /path/to/DREAM4 --size 100 
 
 ## Research integrity
 
-Negative results are first-class evidence here. Earlier versions are not deleted when a hypothesis fails, and corrections are versioned rather than silently rewriting frozen apparatus. The failed v0.5B pilot, the CSuite benchmark-suitability failure and the failed v0.6.1 external finite-shot safety gate remain documented.
+Negative results are first-class evidence here. Earlier versions are not deleted when a hypothesis fails, and corrections are versioned rather than silently rewriting frozen apparatus. The failed v0.5B pilot, the CSuite benchmark-suitability failure, the failed v0.6.1/v0.6.3/v0.6.4 gates and the v0.6.5 pyGSTi learned-discovery suitability failure remain documented.
 
 The authoritative claim-by-claim status is in [`docs/CLAIMS_AND_EVIDENCE.md`](docs/CLAIMS_AND_EVIDENCE.md).
 
 ## Status
 
-Research prototype. **v0.6.1 has exposed boundary extrapolation as the immediate technical bottleneck.** The next high-priority gate is **v0.6.2 boundary extrapolation** on fresh held-out seeds: estimate how divergence changes as the observational boundary changes, propagate that uncertainty to unseen orientations/depths, and compare OARL against equally strong generic trend/extrapolation baselines. v0.5C admissibility and end-to-end economics remain necessary, but external generalization currently has priority.
+Research prototype. **No external OARL-specific learned-discovery advantage is currently established.** v0.6.5 exhausted the pyGSTi opportunity with generic analytic transport, so the next gate must use a genuinely black-box external family whose redundant admissible views are neither metadata duplicates nor exactly recoverable from a supplied model. Until then, the strongest surviving contribution is the boundary-relative identifiability and structural-audit framework—not a competitive learned algorithm.

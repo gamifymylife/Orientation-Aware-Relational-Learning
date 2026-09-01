@@ -28,3 +28,9 @@ The reproduced headline is an 83.333% median score-evaluation reduction in the 2
 ## DREAM4 status
 
 `external/dream4/v01/` preserves the original uploaded apparatus unchanged. `v02/` corrects executable mismatches with the written preregistration; it does not contain or claim an official Size100 result. Official DREAM4 data are not vendored into this repository.
+
+## v0.6.5 pyGSTi analytic audit
+
+v0.6.5 contains no uploaded or separately collected dataset. The 256 held-out depth-8 circuits are exhaustively generated from the public `Gxpi2/Gypi2` gate alphabet in pyGSTi 0.10.2's `smq1Q_XYI` model pack.
+
+The authoritative Fisher evaluator is derived analytically from the public ideal gate semantics using integer `SO(3)` orientation transport. Independently generated pyGSTi central finite differences at steps `1e-3`, `1e-4` and `1e-5` are numerical cross-checks, not evaluator truth. Ordinary/complement view labels share one physical binary observation by construction.
