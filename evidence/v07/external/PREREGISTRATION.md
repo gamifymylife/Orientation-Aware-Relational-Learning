@@ -27,6 +27,21 @@ Target **24** untouched cases; minimum **20** required to launch the confirmator
 
 Case admission is based only on reproducibility, bounded-interface feasibility and evaluator quality. No case may be replaced because OARL performs poorly.
 
+## Frozen numeric thresholds
+
+These values are frozen before any v0.7 external OARL outcome is inspected.
+
+- success/correctness noninferiority margin: **5 percentage points absolute** relative to the strongest generic baseline;
+- false warranted decisions on deterministic exact cases: **0 tolerated**;
+- material complementarity threshold: **0.10 normalized decision-value units** on a per-case [0,1] decision-value scale;
+- useful complementarity prevalence required for the domain claim: **at least 20% of admitted cases**;
+- confidence level for paired case-bootstrap gates: **95%**;
+- primary total-cost measure: **end-to-end wall-clock seconds from policy start through final decision**, including relation/quotient discovery, planning and execution;
+- primary execution-cost measure: **logical/physical A/B probe executions**;
+- `C_plan` and `C_structure` evaluation counts are mandatory secondary decomposition metrics and may not be omitted from reporting.
+
+The primary total-cost gate uses measured end-to-end wall-clock time rather than an arbitrary weighted sum of planning evaluations and probe executions. Paid external-call cost, where nonzero, is reported separately and may additionally support a practical-cost claim, but it does not replace the primary wall-clock gate.
+
 ## Policies
 
 All policies receive the same candidate probes, observations, validity feedback, declared execution costs and accumulated history.
@@ -53,6 +68,8 @@ For surviving candidate explanations `M_S`, a warranted action requires:
 
 If the available admissible probe set is exhausted without decision completeness, the required output is `UNKNOWN`. A found behavioral difference alone is not automatically a regression unless the case evaluator/declared invariant supplies that direction.
 
+Track R (regression search) and Track D (multi-hypothesis decision completeness) are reported separately. A historical A/B regression is sufficient to enter Track R after preflight, but Track D additionally requires an independently authored or mechanically generated nontrivial hypothesis family frozen before acquisition.
+
 ## Costs
 
 Report separately:
@@ -61,8 +78,7 @@ Report separately:
 - `C_plan`: candidate utility / pair / set evaluations;
 - `C_structure`: cost of discovering or certifying quotient/relational structure;
 - wall-clock runtime;
-- external paid-call cost where nonzero;
-- total end-to-end cost under a preregistered normalization.
+- external paid-call cost where nonzero.
 
 No planning or preprocessing cost may be omitted merely because it occurs before acquisition.
 
@@ -70,21 +86,21 @@ No planning or preprocessing cost may be omitted merely because it occurs before
 
 - zero false warranted decisions on deterministic exact cases;
 - matched error/abstention calibration on noisy cases if any are admitted;
-- no OARL success-rate inferiority to the strongest generic baseline beyond the preregistered noninferiority margin;
+- OARL success/correctness may be at most **5 percentage points absolute below** the strongest generic baseline; otherwise the noninferiority gate fails;
 - genuinely unresolved cases must return `UNKNOWN` rather than forced convergence.
 
 ## Primary utility gate
 
-At matched decision correctness / abstention quality, v0.7 passes practical utility only if `oarl_full` improves the safety-adjusted cost frontier over the strongest generic baseline with a 95% case-bootstrap confidence interval excluding zero for at least one of:
+At matched decision correctness / abstention quality, v0.7 passes practical utility only if `oarl_full` improves the safety-adjusted cost frontier over the strongest generic baseline with a 95% paired case-bootstrap confidence interval excluding zero for at least one of:
 
-1. physical/logical execution cost; or
-2. total end-to-end execution + structure + planning cost.
+1. physical/logical A/B execution cost; or
+2. end-to-end wall-clock cost including structure discovery, planning and execution.
 
-A planning-only win is valid only if execution success/correctness is noninferior and all structural-discovery cost is included.
+A planning/computational win is valid only if execution success/correctness passes the 5-point noninferiority gate and all structural-discovery work is included in the measured end-to-end time.
 
 ## Complementarity relevance gate
 
-A nontrivial fraction of admitted real cases must exhibit useful complementarity: at least **20% of cases** must contain an acquired pair/set whose joint decision value exceeds the sum of its one-step values by the frozen materiality threshold. If fewer than 20% do, complementarity may be mathematically valid but is not established as practically frequent in this domain.
+A nontrivial fraction of admitted real cases must exhibit useful complementarity: at least **20% of cases** must contain an acquired pair/set whose joint normalized decision value exceeds the sum of its one-step values by at least **0.10**. If fewer than 20% do, complementarity may be mathematically valid but is not established as practically frequent in this domain.
 
 ## Structural causality gate
 
@@ -98,22 +114,22 @@ Any quotient used by `oarl_full` must be exact or explicitly certified under a f
 
 The standalone OARL practical-advantage claim fails if any of the following occurs:
 
-- false warranted decisions exceed the frozen tolerance;
-- OARL is meaningfully less successful/correct than the strongest generic baseline;
-- all apparent cost savings disappear after counting `C_structure` and planning overhead;
-- relation scrambling leaves the advantage essentially unchanged;
-- useful complementarity occurs in fewer than 20% of admitted cases;
+- any false warranted decision occurs on deterministic exact cases;
+- OARL success/correctness is more than 5 percentage points absolute below the strongest generic baseline;
+- all apparent cost savings disappear after counting structure discovery and planning overhead in end-to-end time;
+- relation scrambling leaves the advantage essentially unchanged under the frozen bootstrap gate;
+- useful complementarity occurs in fewer than 20% of admitted cases using the frozen 0.10 materiality threshold;
 - case selection or replacement uses OARL outcomes.
 
 ## Interpretation ladder
 
 ### A — strong win
 
-OARL improves real execution cost and/or total cost over strong generic adaptive planning, with relational scrambling destroying a material part of the advantage.
+OARL passes safety/noninferiority and improves real execution cost and/or total end-to-end wall-clock cost over strong generic adaptive planning, with relational scrambling destroying a statistically supported material part of the advantage.
 
 ### B — computational win only
 
-Generic lookahead chooses equally good experiments, but quotienting/relational structure materially reduces total planning cost after structure-discovery overhead is included. Interpret OARL as a structural acceleration layer for active experimental design.
+Generic lookahead chooses equally good experiments, but quotienting/relational structure materially reduces end-to-end planning/search cost after structure-discovery overhead is included. Interpret OARL as a structural acceleration layer for active experimental design.
 
 ### C — no incremental advantage
 
