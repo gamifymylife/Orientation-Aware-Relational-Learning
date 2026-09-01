@@ -1,0 +1,19 @@
+{
+  "source_repository": "gamifymylife/adaptive-distinction-engine",
+  "source_branch": "external-evidence-v0.1",
+  "purpose": "Byte-identical frozen actual-revision replay verifiers vendored for public v0.7 CI; no OARL policy code is present here.",
+  "files": {
+    "C001": {"path":"external/v07/source_replay/verify_c001.py","git_blob_sha":"a85934d1dd137c3ff1c046b5aea43b7b6bdb162d"},
+    "C003": {"path":"external/v07/source_replay/verify_c003.py","git_blob_sha":"544f39f1c9bc6929f27e8d2ad360576aa11f229d"},
+    "C004": {"path":"external/v07/source_replay/verify_c004.py","git_blob_sha":"e73abde14dd8e4486ce45b8a0063255a97595b27"},
+    "C005": {"path":"external/v07/source_replay/verify_c005.py","git_blob_sha":"c2975ee25c8f88af294cbf35b2ee1f077d2c2cc3"},
+    "C007": {"path":"external/v07/source_replay/verify_c007.py","git_blob_sha":"ab9d5a48754f6d3c3d05e5bfeda58476777190f8"},
+    "C008": {"path":"external/v07/source_replay/verify_c008.py","git_blob_sha":"84827b193d366d09615f42adcad36272fa9f2618"},
+    "C009": {"path":"external/v07/source_replay/verify_c009.py","git_blob_sha":"495d7a5fbc7c730e36f8a6035fdf81ddc7afafb2"},
+    "C010": {"path":"external/v07/source_replay/verify_c010.py","git_blob_sha":"7fc894cfc07642a1ba2e2d86d937ca4b3b93e021"},
+    "C011": {"path":"external/v07/source_replay/verify_c011.py","git_blob_sha":"d4e602ec806b6eabfea22c1904f12f5045cd6e8b"},
+    "C012": {"path":"external/v07/source_replay/verify_c012.py","git_blob_sha":"2a322fd66db5b9b1a24e8a122a110cfa21bb02e7"},
+    "C016": {"path":"external/v07/source_replay/verify_c016.py","git_blob_sha":"5db68b952993d663ba45c2d3ad768f00522f7fa6"},
+    "C017": {"path":"external/v07/source_replay/verify_c017.py","git_blob_sha":"6eab655f2917738b48c47ad1eeea7cc7ad48f799"}
+  }
+}
