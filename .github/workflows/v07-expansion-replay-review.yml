@@ -16,7 +16,16 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        case: [smol_2029, smol_1914, smol_495]
+        case:
+          - smol_2029
+          - smol_1914
+          - smol_495
+          - pyd_7800
+          - oa_4674
+          - autogen_7463
+          - crew_7077
+          - smol_1984
+          - smol_1863
     runs-on: ubuntu-24.04
     timeout-minutes: 45
     steps:
@@ -31,9 +40,20 @@ jobs:
           python - <<'PY'
           import ast, json, os
           from pathlib import Path
+
           case = os.environ['CASE']
-          number = int(case.rsplit('_', 1)[1])
-          repo = 'huggingface/smolagents'
+          case_map = {
+              'smol_2029': ('huggingface/smolagents', 2029),
+              'smol_1914': ('huggingface/smolagents', 1914),
+              'smol_495': ('huggingface/smolagents', 495),
+              'pyd_7800': ('pydantic/pydantic-ai', 7800),
+              'oa_4674': ('openai/openai-agents-python', 4674),
+              'autogen_7463': ('microsoft/autogen', 7463),
+              'crew_7077': ('crewAIInc/crewAI', 7077),
+              'smol_1984': ('huggingface/smolagents', 1984),
+              'smol_1863': ('huggingface/smolagents', 1863),
+          }
+          repo, number = case_map[case]
           expansion = json.loads(Path('evidence/v07/external/METADATA_EXPANSION_001.json').read_text())
           assert expansion['oarl_executed'] is False
           row = next(x for x in expansion['candidates'] if x['repository'] == repo and x['pr_number'] == number)
