@@ -30,13 +30,11 @@ External validity is now higher priority than further optimization of the synthe
 
 The adapter ran, but the tested published CSuite systems expose too few candidate intervention views for a serious pairwise equivalence-discovery benchmark. The suitability failure is preserved rather than manufacturing OARL-specific views.
 
-### Completed: v0.6.1 pyGSTi external gate
+### Completed: v0.6.1 pyGSTi finite-shot external gate
 
 Gate-set tomography supplies an independently established equivalence structure: gauge transformations can substantially alter internal representation while preserving observable circuit probabilities.
 
-The deterministic smoke gate passed and established that the external domain contains the target phenomenon.
-
-The subsequent preregistered finite-shot competitive gate then asked whether shallow evidence at circuit depths 0–3 could safely certify equivalence under sealed depths 4–6.
+The deterministic smoke gate passed. The subsequent preregistered finite-shot competitive gate asked whether shallow evidence at circuit depths 0–3 could safely certify equivalence under sealed depths 4–6.
 
 Result: **primary safety gate failed**.
 
@@ -47,57 +45,110 @@ Result: **primary safety gate failed**.
 - decisive boundary case: `op_noise=0.010`, sealed max difference 0.02926 > epsilon 0.020;
 - OARL false merges on that class increased from 0/300 at 50k shots to 282/300 at 500k shots.
 
-Interpretation: the current method handles finite-sample uncertainty better than the direct comparator but does not adequately handle **boundary extrapolation uncertainty**. More evidence inside an insufficient boundary can increase confidence in an unsafe merge.
+Interpretation: the current method handles finite-sample uncertainty better than the direct comparator but does not adequately handle **boundary uncertainty**. More evidence inside an insufficient boundary can increase confidence in an unsafe merge.
 
 See `evidence/v061/FINITE_SHOT_REPORT.md`.
 
-## Next: v0.6.2 — prospective boundary extrapolation
+### Completed: v0.6.2 Boundary Information Audit
+
+v0.6.2 tested the distinction between evidence quantity and information span directly in the external pyGSTi system.
+
+Frozen local mechanism directions were uniform X/Y/Z rotations. The initial boundary was the two depth-1 circuits. Candidate probes were exhaustive circuits at depths 2–6.
+
+Result: **structural gate passed; no OARL-specific selection advantage established**.
+
+- initial Fisher spectrum approximately `[0, 1, 1]`;
+- initial rank **2**, nullity **1**;
+- repetition factors 1, 10, 100 and 1000 all remained rank **2**;
+- at 1000x repetition the spectrum was approximately `[0, 1000, 1000]` — magnitude increased, span did not;
+- the expanded 126-probe family reached rank **3**;
+- one depth-2 circuit (`Gxpi2.Gypi2`) completed rank 3;
+- OARL-motivated null-space coverage selected that circuit at added depth cost **2**;
+- greedy D-optimality selected the same circuit at the same cost **2**;
+- E-optimality and cosine diversity reached rank 3 at cost 3;
+- random new-view selection reached rank 3 at cost 6.
+
+Interpretation: the “100 A's do not create a new informational direction” phenomenon is cleanly demonstrated, but **rank-aware selection is not an OARL novelty**. Classical optimal-design machinery already solves this local selection problem at least as well in the frozen audit.
+
+See `evidence/v062/V062_RESULT.md`.
+
+## Next: v0.6.3 — active boundary vs repetition under finite cost
 
 This is now the highest-priority scientific gate.
 
-### Question
+### Decisive question
 
-> Can we certify that an apparent equivalence is likely to remain inside tolerance as the observational/interventional boundary changes, rather than merely certifying it on the boundary already observed?
+> Given a finite budget, when should the system spend another sample on an existing boundary and when should it pay to acquire a genuinely different boundary?
 
-### Required design
+The target is no longer merely rank completion. The gate must include finite-shot uncertainty, explicit probe cost, equivalence/abstention risk and downstream mechanism discrimination.
 
-Use fresh seeds that have never been used to tune or evaluate v0.6.1.
+### Fresh evidence only
 
-Discovery evidence must remain shallow; sealed deeper circuits remain hidden until evaluation.
+Use fresh seeds and, preferably, additional mechanism families not used to design v0.6.1 or v0.6.2.
 
-Candidate OARL method should:
+The policy must not see sealed evaluator boundaries or hidden generating transforms.
 
-1. estimate behavioral difference as a function of orientation/depth;
-2. estimate uncertainty in the change of that difference across depth;
-3. construct a conservative forward growth envelope;
-4. propagate the envelope to a preregistered unseen horizon;
-5. emit `EQUIVALENT` only if the entire upper envelope remains below epsilon;
-6. emit `DISTINCT` only when observed evidence establishes violation;
-7. otherwise emit `UNKNOWN`.
+### Mandatory competitors
 
-### Mandatory baselines
+At minimum include:
 
-Do not compare only against the weak direct probability comparator. Include:
+- repeat-current-boundary;
+- random new-view selection;
+- cosine/diversity selection;
+- greedy D-optimality;
+- greedy E-optimality;
+- generic sensitivity/null-space rank design;
+- generic Bayesian expected information gain where tractable;
+- OARL boundary-equivalence + abstention + quotient-aware policy.
 
-- direct simultaneous probability equivalence;
-- linear trend extrapolation;
-- isotonic/monotone growth envelope;
-- polynomial regression with uncertainty;
-- a simple Lipschitz/worst-case growth bound;
-- pyGSTi gauge provenance oracle as evaluator only;
-- OARL relational boundary-extrapolation certificate.
+D/E-optimality and null-space coverage are not weak strawmen; v0.6.2 showed they are the correct local competitors.
 
-If a generic trend/envelope method matches or dominates OARL, narrow the OARL-specific claim.
+### OARL-specific burden
 
-### Primary safety gate
+OARL only earns incremental utility if its structural layer adds something classical design does not already provide. Candidate advantages that may be tested are:
 
-Zero accepted merges whose sealed max difference exceeds the frozen epsilon, with useful equivalence recall under a preregistered minimum.
+1. safer refusal to quotient superficially redundant views;
+2. lower false-merge risk at matched experimental cost;
+3. explicit `UNKNOWN` handling when the available boundary family is insufficient;
+4. cheaper search by certifying transport-equivalent experiment families before ordinary OED;
+5. better total cost once evidence acquisition + certification + downstream search are counted together.
 
-Do not lower a threshold after inspecting confirmatory failures. Any new threshold or model is a new prospective protocol.
+### Primary endpoints
+
+- mechanism-identification correctness;
+- false-high-confidence rate;
+- false-equivalence/false-merge rate;
+- abstention rate;
+- total experimental cost;
+- number of distinct boundaries acquired;
+- repeated samples spent on already covered information directions;
+- final information rank / condition where locally meaningful;
+- total computation including certification.
+
+### Kill / narrowing criterion
+
+If standard D/E-optimal or generic Bayesian design matches OARL on safety and total cost without the structural certification layer, narrow OARL to a conceptual/equivalence-analysis framework rather than claiming a superior active measurement policy.
+
+## Paper programme
+
+The August 2026 OARL paper is historical. The current paper direction is `paper/CONFIDENCE_WITHOUT_IDENTIFIABILITY_v0_1.md`.
+
+Its central structure is:
+
+1. define boundary-relative observational equivalence;
+2. prove exact fixed-boundary IID repetition cannot break exact equivalence;
+3. distinguish information magnitude from information span using the classical Fisher-rank result;
+4. present v0.6.1 as a prospective failure showing confidence can outpace boundary adequacy;
+5. present v0.6.2 as the clean executable rank demonstration;
+6. explicitly show D-optimality ties the OARL-motivated local selector;
+7. locate the remaining novelty burden in safe equivalence/abstention/quotienting upstream of standard OED;
+8. make v0.6.3 the decisive algorithmic utility test.
+
+Do not submit the new manuscript as a strong algorithm paper until v0.6.3 or an equivalent held-out utility gate resolves that burden.
 
 ## Still required: v0.5C practical gate
 
-v0.5C remains necessary but is no longer the immediate priority.
+v0.5C remains necessary but is not the immediate priority.
 
 ### Admissibility certification
 
@@ -117,9 +168,9 @@ Include evidence acquisition, certificate computation, score evaluations, wall-c
 
 Do not call the method deployable unless the full pipeline is cheaper while preserving correctness and risk.
 
-## Later v0.6+ generalization
+## Later generalization
 
-After the boundary-extrapolation gate:
+After v0.6.3:
 
 1. run corrected DREAM4 Size100 confirmatory gate;
 2. add another third-party executable benchmark with genuine redundant admissible views;
@@ -134,7 +185,7 @@ After the boundary-extrapolation gate:
 
 Before claiming a major methodological contribution, benchmark against symmetry/group reduction, canonicalization, bisimulation/behavioral equivalence, causal abstraction and generic experimental-design compression.
 
-The novelty burden is not the fact that quotienting known duplicates saves search. It is whether an orientation-aware **discovery/certification/risk layer** can safely identify which distinctions survive changes of boundary and improve a useful frontier over generic alternatives.
+The novelty burden is not the fact that quotienting known duplicates saves search, nor the fact that Fisher-rank-aware design can seek new sensitivity directions. It is whether an orientation-aware **discovery/certification/risk layer** can safely determine which experimental distinctions survive changes of boundary and improve a useful frontier over established methods.
 
 ## Repository engineering
 
