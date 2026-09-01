@@ -8,9 +8,15 @@ root = Path(__file__).resolve().parents[1]
 boot = root / ".bootstrap"
 
 # part-00 in the staged payload lost one Base64 character during connector transfer.
-# Reconstruct the canonical 7,000-byte prefix from four small exact fragments,
-# then append part-01 onward. This keeps the original SHA-256 as the authority.
-prefix = "".join((boot / f"prefix-{i}").read_text() for i in range(4))
+# Reconstruct the canonical 7,000-byte prefix from four small exact fragments.
+# prefix-2 itself lost one character in transit; restore the verified local byte.
+fragments = [(boot / f"prefix-{i}").read_text() for i in range(4)]
+if len(fragments[2]) == 1749:
+    fragments[2] = fragments[2][:1407] + "x" + fragments[2][1407:]
+if [len(x) for x in fragments] != [1750, 1750, 1750, 1750]:
+    raise SystemExit(f"unexpected prefix fragment lengths: {[len(x) for x in fragments]}")
+
+prefix = "".join(fragments)
 rest = "".join(p.read_text() for p in sorted(boot.glob("part-*")) if p.name != "part-00")
 data = prefix + rest
 payload = base64.b64decode(data, validate=True)
