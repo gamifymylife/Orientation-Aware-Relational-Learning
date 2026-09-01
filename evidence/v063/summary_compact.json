@@ -1,0 +1,73 @@
+{
+  "candidate_views": 508,
+  "incremental_utility_observed": false,
+  "methods": {
+    "OARL-XFIT": {
+      "break_even_score_cost": 1511.0277777777778,
+      "compression_fraction": 0.4251968503937008,
+      "downstream_logdet": 11.314181542250978,
+      "downstream_score_evaluations": 2336,
+      "false_task_merges": 555,
+      "n_classes": 292,
+      "pair_precision": 0.261968085106383,
+      "pair_recall_global": 0.10401267159450897,
+      "selected_total_depth_cost": 56
+    },
+    "ORACLE": {
+      "break_even_score_cost": null,
+      "compression_fraction": 0.6653543307086613,
+      "downstream_logdet": 11.314181542250978,
+      "downstream_score_evaluations": 1360,
+      "false_task_merges": null,
+      "n_classes": 170,
+      "pair_precision": null,
+      "pair_recall_global": null,
+      "selected_total_depth_cost": 56
+    },
+    "POINT": {
+      "break_even_score_cost": 1070.8647260273972,
+      "compression_fraction": 0.5748031496062992,
+      "downstream_logdet": 11.146603855062581,
+      "downstream_score_evaluations": 1728,
+      "false_task_merges": 1143,
+      "n_classes": 216,
+      "pair_precision": 0.20680083275503122,
+      "pair_recall_global": 0.1573389651531151,
+      "selected_total_depth_cost": 53
+    },
+    "RAW": {
+      "break_even_score_cost": null,
+      "compression_fraction": 0.0,
+      "downstream_logdet": 11.314181542250978,
+      "downstream_score_evaluations": 4064,
+      "false_task_merges": null,
+      "n_classes": 508,
+      "pair_precision": null,
+      "pair_recall_global": null,
+      "selected_total_depth_cost": 56
+    },
+    "UCB": {
+      "break_even_score_cost": 1104.9204946996467,
+      "compression_fraction": 0.5570866141732284,
+      "downstream_logdet": 11.146603855062581,
+      "downstream_score_evaluations": 1800,
+      "false_task_merges": 1032,
+      "n_classes": 225,
+      "pair_precision": 0.22406015037593985,
+      "pair_recall_global": 0.1573389651531151,
+      "selected_total_depth_cost": 53
+    }
+  },
+  "oarl_dominated_by": [],
+  "oracle_classes": 170,
+  "oracle_compression_fraction": 0.6653543307086613,
+  "primary_checks": {
+    "compression_ge_20pct": true,
+    "downstream_logdet_preserved": true,
+    "selected_depth_cost_no_greater_than_raw": true,
+    "zero_accepted_task_false_merges": false
+  },
+  "primary_safety_gate_pass": false,
+  "shortlisted_pairs": 1441,
+  "version": "v0.6.3-safe-quotient-gate"
+}
