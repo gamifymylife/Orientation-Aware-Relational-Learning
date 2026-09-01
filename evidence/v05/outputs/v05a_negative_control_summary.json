@@ -1,0 +1,10 @@
+{
+  "worlds": 300,
+  "false_merge_pairs": 0,
+  "all_unique_classes_retained": true,
+  "orientation_counts": [
+    8,
+    16,
+    24
+  ]
+}
