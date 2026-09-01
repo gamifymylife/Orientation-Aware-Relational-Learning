@@ -27,11 +27,13 @@ The current pilot outputs continuous holdout transport scores. It does **not** t
 
 ## Pilot subset
 
-The adapter-development pilot is frozen to:
+The adapter-development pilot is frozen to three actual CSuite v0.1 datasets spanning simple continuous, nonlinear/confounded, and mixed-type construction families:
 
 - `lingauss`;
 - `nonlin_simpson`;
-- `cat_chain`.
+- `cat_to_cts`.
+
+An earlier scaffold typo named a nonexistent `cat_chain` target. It was corrected before any pilot data were successfully downloaded or interpreted, so no scientific result was discarded or replaced.
 
 Pilot results may diagnose adapter errors and calibrate a later v0.6.1 protocol. They are never counted as confirmatory evidence.
 
@@ -59,7 +61,7 @@ The row split is derived from a SHA-256 hash of the stable `system:environment` 
 python scripts/run_v06_csuite_pilot.py --out evidence/v06/pilot_outputs
 ```
 
-The runner downloads the pinned CSuite v0.1 `interventions.json` artifacts for the pilot subset, records SHA-256 hashes, runs the neutral exact-duplicate and similarity baselines, and writes evaluator-only pair transport scores.
+The runner downloads the pinned CSuite v0.1 release ZIPs from the official `microsoft/csuite` GitHub release, extracts each `interventions.json`, records SHA-256 hashes for both the release archive and extracted intervention artifact, runs the neutral exact-duplicate and similarity baselines, and writes evaluator-only pair transport scores.
 
 GitHub Actions workflow:
 
