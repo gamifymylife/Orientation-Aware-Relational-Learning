@@ -34,7 +34,9 @@ Each view is evaluated on the following frozen mechanism probe library:
 - target model;
 - ±0.0025, ±0.0050 and ±0.0100 coherent rotations independently on X, Y and Z.
 
-For every view × mechanism probe, two independent Bernoulli shot splits are generated. Confirmatory shot count is **4,000 shots per split**. Seeds are fixed in code and are not tuned after results.
+For every view × mechanism probe, two independent Bernoulli shot splits are generated. Confirmatory shot count is **50,000 shots per split**. Seeds are fixed in code and are not tuned after results.
+
+The 50,000-shot value was frozen before confirmatory execution from the analytic width of the simultaneous Bernoulli confidence bound: with 19 probe probabilities and a 0.020 equivalence tolerance, 4,000 shots would make acceptance of even exact `p≈0.5` equivalence effectively impossible after familywise correction. No benchmark output was inspected before this correction.
 
 ## Hidden task-equivalence truth
 
@@ -60,7 +62,7 @@ For POINT, UCB and OARL-XFIT, accepted equivalence edges are converted to classe
 
 To avoid making certification trivially quadratic, all learned compression methods use the same cheap canonicalized point-signature shortlist:
 
-- canonicalize each view under `p` versus `1-p` by lexicographic choice;
+- canonicalize each view under `p` versus `1-p` using complement-invariant distance from 0.5;
 - find the **4 nearest candidate signatures** by normalized RMSE;
 - certify the union of these undirected candidate pairs.
 
@@ -68,7 +70,7 @@ Shortlisting recall against oracle-equivalent partners is reported explicitly. A
 
 ## Frozen thresholds
 
-- shots per split: 4,000
+- shots per split: 50,000
 - shortlist neighbours: 4
 - familywise alpha: 0.001
 - response equivalence tolerance: 0.020 probability units
