@@ -1,0 +1,130 @@
+{
+  "adaptive_stage_status": "NOT_WARRANTED_ON_THIS_FAMILY",
+  "confirmatory_depth": 8,
+  "development_v064_correction_audit": {
+    "analytic_exact_classes": 58,
+    "analytic_exact_vs_legacy_fd_operational": {
+      "candidate_only_pairs": 0,
+      "candidate_pairs": 897,
+      "pair_disagreements": 3261,
+      "reference_pairs": 4158,
+      "reference_pairs_missed": 3261
+    },
+    "analytic_operational_classes": 58,
+    "analytic_operational_relation_axioms": {
+      "nontransitive_endpoint_pairs": 0,
+      "nontransitive_witness_paths": 0,
+      "reflexive": true,
+      "symmetric": true,
+      "transitive": true
+    },
+    "analytic_operational_vs_legacy_fd_operational": {
+      "candidate_only_pairs": 0,
+      "candidate_pairs": 897,
+      "pair_disagreements": 3261,
+      "reference_pairs": 4158,
+      "reference_pairs_missed": 3261
+    },
+    "exact_relation_axioms": {
+      "nontransitive_endpoint_pairs": 0,
+      "nontransitive_witness_paths": 0,
+      "reflexive": true,
+      "symmetric": true,
+      "transitive": true
+    },
+    "legacy_fd_operational_classes": 91,
+    "legacy_fd_operational_relation_axioms": {
+      "nontransitive_endpoint_pairs": 0,
+      "nontransitive_witness_paths": 0,
+      "reflexive": true,
+      "symmetric": true,
+      "transitive": true
+    },
+    "physical_circuits": 254,
+    "raw_views": 508,
+    "v064_nominal_view_shot_units": 1930400000,
+    "v064_shared_physical_shot_units": 965200000,
+    "view_accounting_overstatement_factor": 2.0
+  },
+  "exact_equivalent_pairs": 4667,
+  "exact_relation_axioms": {
+    "nontransitive_endpoint_pairs": 0,
+    "nontransitive_witness_paths": 0,
+    "reflexive": true,
+    "symmetric": true,
+    "transitive": true
+  },
+  "learned_discovery_suitability_checks": {
+    "operational_oracle_preserves_downstream": true,
+    "operational_relation_is_equivalence": true,
+    "residual_compression_beyond_structural_ge_20pct": false
+  },
+  "learned_discovery_suitability_pass": false,
+  "methods": {
+    "OPERATIONAL-ORACLE": {
+      "bernoulli_evidence_shots": 0,
+      "compression_beyond_view_canonicalization": 0.8046875,
+      "exact_false_merges": 0,
+      "logdet": 12.32736950062687,
+      "n_classes": 50,
+      "operational_false_merges": 0,
+      "score_evaluations": 400,
+      "selected_total_depth_cost": 64,
+      "view_level_compression_fraction": 0.90234375
+    },
+    "RAW-VIEWS": {
+      "bernoulli_evidence_shots": 0,
+      "compression_beyond_view_canonicalization": null,
+      "exact_false_merges": null,
+      "logdet": 12.32736950062687,
+      "n_classes": 512,
+      "operational_false_merges": null,
+      "score_evaluations": 4096,
+      "selected_total_depth_cost": 64,
+      "view_level_compression_fraction": 0.0
+    },
+    "STRUCTURAL-TRANSPORT": {
+      "bernoulli_evidence_shots": 0,
+      "compression_beyond_view_canonicalization": 0.8046875,
+      "exact_false_merges": 0,
+      "logdet": 12.32736950062687,
+      "n_classes": 50,
+      "operational_false_merges": 0,
+      "score_evaluations": 400,
+      "selected_total_depth_cost": 64,
+      "view_level_compression_fraction": 0.90234375
+    },
+    "VIEW-CANONICAL": {
+      "bernoulli_evidence_shots": 0,
+      "compression_beyond_view_canonicalization": 0.0,
+      "exact_false_merges": 0,
+      "logdet": 12.32736950062687,
+      "n_classes": 256,
+      "operational_false_merges": 0,
+      "score_evaluations": 2048,
+      "selected_total_depth_cost": 64,
+      "view_level_compression_fraction": 0.5
+    }
+  },
+  "oarl_specific_utility_observed": false,
+  "operational_compatible_pairs": 4667,
+  "operational_relation_axioms": {
+    "nontransitive_endpoint_pairs": 0,
+    "nontransitive_witness_paths": 0,
+    "reflexive": true,
+    "symmetric": true,
+    "transitive": true
+  },
+  "physical_circuits": 256,
+  "raw_candidate_views": 512,
+  "residual_operational_compression_beyond_structural": 0.0,
+  "structural_baseline_checks": {
+    "compression_beyond_view_canonicalization_ge_20pct": true,
+    "downstream_logdet_preserved": true,
+    "selected_depth_cost_no_greater": true,
+    "zero_bernoulli_evidence": true,
+    "zero_exact_false_merges": true
+  },
+  "structural_baseline_utility_pass": true,
+  "version": "v0.6.5-structural-baseline-audit"
+}
