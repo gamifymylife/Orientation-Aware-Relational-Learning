@@ -67,7 +67,7 @@ evidence/v01/             v0.1 smoke evidence
 evidence/v02/             v0.2 negative confirmatory evidence
 evidence/v03/             exact quotient / Gate-2 evidence
 evidence/v04/             structural-metadata error evidence
-evidence/v05a/            exact structure-discovery evidence
+evidence/v05/             exact structure-discovery evidence
 evidence/v05b/            finite-noise preregistration, failed pilot note and confirmatory evidence
 external/historical/      Meselson–Stahl and Luria–Delbrück replay
 external/dream4/v01/      original frozen DREAM4 harness
@@ -103,4 +103,4 @@ Negative results are first-class evidence here. Earlier versions are not deleted
 
 ## Status
 
-Research prototype. **v0.5B.1 has passed its synthetic finite-noise structural-certification gate.** The next scientific burden is external and representational generalization: third-party executable systems, learned representations, approximate-equivalence calibration, and end-to-end certification economics.
+Research prototype. **v0.5B.1 has passed its synthetic finite-noise equivalence-certification gate.** The immediate next gate is **v0.5C**: admissibility certification plus full end-to-end finite-noise economics against exhaustive Generic OED. External and learned-representation generalization follows after that.
