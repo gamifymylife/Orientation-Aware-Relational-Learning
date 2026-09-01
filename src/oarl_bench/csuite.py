@@ -56,6 +56,12 @@ def _as_2d_float(value: object, *, name: str) -> np.ndarray:
     return array
 
 
+def _index_tuple(value: object) -> tuple[int, ...]:
+    if value is None:
+        return ()
+    return tuple(int(v) for v in value)
+
+
 def _stable_row_split(n_rows: int, *, seed_material: str) -> tuple[np.ndarray, np.ndarray]:
     digest = hashlib.sha256(seed_material.encode("utf-8")).digest()
     seed = int.from_bytes(digest[:8], "little", signed=False)
@@ -98,9 +104,9 @@ def load_csuite_interventions(
                 discovery_reference=reference[discovery_rows],
                 holdout_primary=primary[holdout_rows],
                 holdout_reference=reference[holdout_rows],
-                intervention_idxs=tuple(int(v) for v in env.get("intervention_idxs", [])),
-                effect_idxs=tuple(int(v) for v in env.get("effect_idxs", [])),
-                conditioning_idxs=tuple(int(v) for v in env.get("conditioning_idxs", [])),
+                intervention_idxs=_index_tuple(env.get("intervention_idxs")),
+                effect_idxs=_index_tuple(env.get("effect_idxs")),
+                conditioning_idxs=_index_tuple(env.get("conditioning_idxs")),
             )
         )
     return views
