@@ -6,5 +6,47 @@
   "oarl_external_outcomes_executed": false,
   "confirmation_lock_created": false,
   "selection_protocol": "evidence/v07/external/SELECTION_PROTOCOL.md",
-  "candidates": []
+  "source_program": {
+    "repository": "gamifymylife/adaptive-distinction-engine",
+    "branch": "external-evidence-v0.1",
+    "artifact": "external_evidence/CANDIDATE_POOL.json",
+    "selection_date": "2026-08-29",
+    "use_boundary": "Import source identity and replay-eligibility status only. Do not import Mechanism Diff or OARL search outcomes."
+  },
+  "prior_oarl_pilot_exclusions": [
+    "openai/openai-agents-python#4278",
+    "microsoft/autogen#7045",
+    "microsoft/autogen#6799",
+    "pydantic/pydantic-ai#6871",
+    "pydantic/pydantic-ai#7504"
+  ],
+  "counts": {
+    "candidate_entries": 20,
+    "actual_revision_replay_verified": 12,
+    "unreviewed": 7,
+    "rejected": 1,
+    "v07_external_oarl_runs": 0
+  },
+  "candidates": [
+    {"id":"C001","source":"openai/openai-agents-python#4655","title":"preserve tuple annotations for variadic tool arguments","source_status":"eligible","v07_status":"REPLAY_VERIFIED_NEEDS_V07_PREFLIGHT","oarl_executed":false},
+    {"id":"C002","source":"openai/openai-agents-python#4707","title":"preserve UTF-8 boundaries in Cloudflare SSE","source_status":"ineligible","v07_status":"REJECTED_SAME_INTERFACE_FAILURE","oarl_executed":false},
+    {"id":"C003","source":"openai/openai-agents-python#4627","title":"read tool args without Pydantic property shadowing","source_status":"eligible","v07_status":"REPLAY_VERIFIED_NEEDS_V07_PREFLIGHT","oarl_executed":false},
+    {"id":"C004","source":"openai/openai-agents-python#4663","title":"redact STT prompts from traces","source_status":"eligible","v07_status":"REPLAY_VERIFIED_NEEDS_V07_PREFLIGHT","oarl_executed":false},
+    {"id":"C005","source":"openai/openai-agents-python#4654","title":"persist resumed tool guardrail results","source_status":"eligible","v07_status":"REPLAY_VERIFIED_NEEDS_V07_PREFLIGHT","oarl_executed":false},
+    {"id":"C006","source":"openai/openai-agents-python#4644","title":"enforce public Voice class state coverage","source_status":"unreviewed","v07_status":"NEEDS_ACTUAL_REVISION_REPLAY","oarl_executed":false},
+    {"id":"C007","source":"pydantic/pydantic-ai#7412","title":"fix inherited realtime WebRTC and Azure for_realtime bugs","source_status":"eligible","v07_status":"REPLAY_VERIFIED_NEEDS_V07_PREFLIGHT","oarl_executed":false},
+    {"id":"C008","source":"pydantic/pydantic-ai#7499","title":"preserve all conditions in pruned span queries","source_status":"eligible","v07_status":"REPLAY_VERIFIED_NEEDS_V07_PREFLIGHT","oarl_executed":false},
+    {"id":"C009","source":"pydantic/pydantic-ai#7626","title":"fix DeferredToolRequests.remaining cross-category result IDs","source_status":"eligible","v07_status":"REPLAY_VERIFIED_NEEDS_V07_PREFLIGHT","oarl_executed":false},
+    {"id":"C010","source":"pydantic/pydantic-ai#7642","title":"fix TestModel generation for equal inclusive bounds","source_status":"eligible","v07_status":"REPLAY_VERIFIED_NEEDS_V07_PREFLIGHT","oarl_executed":false},
+    {"id":"C011","source":"pydantic/pydantic-ai#7720","title":"fix dropped zero-argument tool calls in CohereModel","source_status":"eligible","v07_status":"REPLAY_VERIFIED_NEEDS_V07_PREFLIGHT","oarl_executed":false},
+    {"id":"C012","source":"langchain-ai/langgraph#8526","title":"collect writes at plain-value seed in delta channel history","source_status":"eligible","v07_status":"REPLAY_VERIFIED_NEEDS_V07_PREFLIGHT","oarl_executed":false},
+    {"id":"C013","source":"langchain-ai/langgraph#8535","title":"find plain-value seeds when walking delta history","source_status":"unreviewed","v07_status":"NEEDS_ACTUAL_REVISION_REPLAY","oarl_executed":false},
+    {"id":"C014","source":"langchain-ai/langgraph#8315","title":"updateState metadata and counters for delta channel","source_status":"unreviewed","v07_status":"NEEDS_ACTUAL_REVISION_REPLAY","oarl_executed":false},
+    {"id":"C015","source":"crewAIInc/crewAI#7032","title":"let a declaration drive conversational mode","source_status":"unreviewed","v07_status":"NEEDS_ACTUAL_REVISION_REPLAY","oarl_executed":false},
+    {"id":"C016","source":"crewAIInc/crewAI#7111","title":"run model call hooks on every path and propagate a deny","source_status":"eligible","v07_status":"REPLAY_VERIFIED_NEEDS_V07_PREFLIGHT","oarl_executed":false},
+    {"id":"C017","source":"crewAIInc/crewAI#7065","title":"keep message roles when Agent.kickoff gets a conversation","source_status":"eligible","v07_status":"REPLAY_VERIFIED_NEEDS_V07_PREFLIGHT","oarl_executed":false},
+    {"id":"C018","source":"crewAIInc/crewAI#7079","title":"skip interception hooks on crewai-internal flows","source_status":"unreviewed","v07_status":"NEEDS_ACTUAL_REVISION_REPLAY","oarl_executed":false},
+    {"id":"C019","source":"crewAIInc/crewAI#7073","title":"record task failures as failures rather than successes","source_status":"unreviewed","v07_status":"NEEDS_ACTUAL_REVISION_REPLAY","oarl_executed":false},
+    {"id":"C020","source":"microsoft/autogen#1938","title":"fix asynchronous initiate chats scheduling","source_status":"unreviewed","v07_status":"NEEDS_ACTUAL_REVISION_REPLAY","oarl_executed":false}
+  ]
 }
