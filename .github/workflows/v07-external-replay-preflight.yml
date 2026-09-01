@@ -1,0 +1,78 @@
+name: v0.7 external replay preflight
+
+on:
+  pull_request:
+    paths:
+      - "evidence/v07/external/**"
+      - "scripts/validate_v07_external_corpus.py"
+      - "tests/test_v07_external_registry.py"
+      - ".github/workflows/v07-external-replay-preflight.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  replay:
+    strategy:
+      fail-fast: false
+      matrix:
+        case_id: [C001, C003, C004, C005, C007, C008, C009, C010, C011, C012, C016, C017]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    steps:
+      - name: Checkout OARL
+        uses: actions/checkout@v4
+
+      - name: Checkout frozen Mechanism Diff evidence source
+        uses: actions/checkout@v4
+        with:
+          repository: gamifymylife/adaptive-distinction-engine
+          ref: external-evidence-v0.1
+          path: source-evidence
+          persist-credentials: false
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Assert v0.7 contamination boundary and imported pins
+        env:
+          CASE_ID: ${{ matrix.case_id }}
+        run: |
+          python - <<'PY'
+          import json, os
+          from pathlib import Path
+          cid = os.environ['CASE_ID']
+          reg = json.loads(Path('evidence/v07/external/CANDIDATE_REGISTRY.json').read_text())
+          assert reg['oarl_external_outcomes_executed'] is False
+          assert reg['confirmation_lock_created'] is False
+          row = next(x for x in reg['candidates'] if x['id'] == cid)
+          assert row['oarl_executed'] is False
+          src = json.loads(Path(f'source-evidence/external_evidence/eligible/{cid}.json').read_text())
+          assert row['source'] == src['source']
+          assert row['pre_fix_revision'] == src['pre_fix_revision']
+          assert row['post_fix_revision'] == src['post_fix_revision']
+          assert row['source_eligibility_blob_sha']
+          print(f'{cid}: provenance boundary PASS')
+          PY
+
+      - name: Reconfirm exact historical A/B replay
+        env:
+          CASE_ID: ${{ matrix.case_id }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          case_lower="$(echo "$CASE_ID" | tr '[:upper:]' '[:lower:]')"
+          mkdir -p replay-output
+          python "source-evidence/external_evidence/pilots/verify_${case_lower}.py" \
+            | tee "replay-output/${CASE_ID}.json"
+
+      - name: Upload replay evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: v07-replay-${{ matrix.case_id }}
+          path: replay-output/${{ matrix.case_id }}.json
+          if-no-files-found: warn
+          retention-days: 90
