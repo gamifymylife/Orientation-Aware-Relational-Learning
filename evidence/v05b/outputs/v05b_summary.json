@@ -1,0 +1,43 @@
+{
+  "accepted_equivalence_certificates": 829,
+  "accepted_mapping_errors": 0,
+  "checks": {
+    "aggregate_pair_recall_ge_0_20": true,
+    "max_offset_error_z_le_0_05": true,
+    "max_scale_relative_error_le_0_06": true,
+    "mean_compression_ge_0_10": true,
+    "pairwise_precision_is_one": true,
+    "zero_accepted_mapping_errors": true,
+    "zero_false_equivalence_certificates_on_unique_pairs": true,
+    "zero_pairwise_false_merges_in_equivalence_worlds": true
+  },
+  "discovered_correct_rate": 0.78,
+  "discovered_false_high_confidence_rate": 0.01,
+  "discovered_vs_oracle_score_eval_reduction": -1.2737484737484737,
+  "distinct_seed_range": [
+    1000,
+    1299
+  ],
+  "downstream_worlds": 100,
+  "equivalence_worlds": 400,
+  "equivalent_seed_range": [
+    2000,
+    2099
+  ],
+  "false_equivalence_certificates": 0,
+  "gate_pass": true,
+  "max_offset_error_z": 0.021219437927202458,
+  "max_scale_relative_error": 0.03923936111157866,
+  "mean_compression_fraction": 0.17869791666666665,
+  "n_samples_per_split": 2000,
+  "oracle_correct_rate": 0.76,
+  "oracle_false_high_confidence_rate": 0.01,
+  "pair_fn": 3187.0,
+  "pair_fp": 0.0,
+  "pair_precision": 1.0,
+  "pair_recall": 0.2756818181818182,
+  "pair_tp": 1213.0,
+  "unique_pair_challenges": 72600,
+  "version": "v0.5B.1",
+  "wall_runtime_s": 84.423334501
+}
