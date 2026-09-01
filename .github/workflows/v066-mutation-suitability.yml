@@ -1,0 +1,58 @@
+name: v0.6.6 mutation suitability gate
+
+on:
+  pull_request:
+    paths:
+      - 'src/oarl_bench/mutation_equivalence.py'
+      - 'scripts/prepare_v066_mutation_data.py'
+      - 'scripts/run_v066_mutation_suitability.py'
+      - 'tests/test_mutation_equivalence.py'
+      - 'external/mutation/v066/**'
+      - 'evidence/v066/**'
+      - '.github/workflows/v066-mutation-suitability.yml'
+  workflow_dispatch:
+
+jobs:
+  confirmatory:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install OARL
+        run: pip install -e '.[dev]'
+      - name: Run mutation equivalence unit tests
+        run: pytest -q tests/test_mutation_equivalence.py
+      - name: Verify compact artifact checksums
+        run: |
+          python - <<'PY'
+          import hashlib
+          import json
+          from pathlib import Path
+
+          manifest = json.loads(Path('external/mutation/v066/manifest.json').read_text())
+          data = Path('external/mutation/v066/data')
+          for row in manifest['matrices']:
+              path = data / row['compact_file']
+              assert hashlib.sha256(path.read_bytes()).hexdigest() == row['compact_sha256']
+          PY
+      - name: Reproduce frozen suitability result
+        run: python scripts/run_v066_mutation_suitability.py --out /tmp/v066-summary.json
+      - name: Verify preserved negative result
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          fresh = json.loads(Path('/tmp/v066-summary.json').read_text())
+          frozen = json.loads(Path('evidence/v066/summary_compact.json').read_text())
+          fresh.pop('analysis_wall_clock_seconds')
+          frozen.pop('analysis_wall_clock_seconds')
+          assert fresh == frozen
+          assert fresh['suitability_passed'] is False
+          assert fresh['aggregate']['passing_matrices'] == 3
+          assert fresh['gates']['all_have_at_least_200_eligible_tests'] is False
+          assert fresh['gates']['all_oracle_quotients_preserve_greedy_task'] is True
+          print('v0.6.6 suitability_passed =', fresh['suitability_passed'])
+          PY

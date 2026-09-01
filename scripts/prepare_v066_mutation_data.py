@@ -57,8 +57,8 @@ def convert(
         destination,
         project=np.asarray(project),
         fault=np.asarray(fault),
-        test_types=frame.iloc[:, 0].astype(str).to_numpy(),
-        test_names=frame.iloc[:, 1].astype(str).to_numpy(),
+        test_types=np.asarray(frame.iloc[:, 0].astype(str).tolist(), dtype=str),
+        test_names=np.asarray(frame.iloc[:, 1].astype(str).tolist(), dtype=str),
         mutant_ids=mutant_ids,
         kills=kills,
     )
@@ -97,7 +97,10 @@ def main() -> None:
         "source_repository": "https://github.com/donghwan-shin/Diversity-aware-Mutation-Testing",
         "source_commit": SOURCE_COMMIT,
         "source_license": "MIT",
-        "selection_rule": "lowest SHA-256 v066-confirm:<project>:<fault> among metadata-eligible matrices",
+        "selection_rule": (
+            "per non-Chart project, lowest SHA-256 of v066-confirm:<project>:<fault> "
+            "among matrices with >=500 raw tests, >=200 mutants, and <=15000000 bytes"
+        ),
         "matrices": rows,
     }
     manifest_path = args.out.parent / "manifest.json"

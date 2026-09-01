@@ -24,13 +24,29 @@ The programme has changed materially as evidence accumulated. The original speci
 | v0.6.3 | Can response-level quotienting safely reduce a fixed downstream D-optimal search? | OARL compressed 42.5% but accepted 555 task-false merges. | **Safety gate failed** |
 | v0.6.4 | Can direct finite-Fisher certification repair safety? | Zero evaluator-defined false merges but zero compression at a nominal 1.9304B view-shot cost. Its finite-difference oracle was later shown to fragment exact zero-Fisher classes. | **Utility gate failed; evaluator interpretation corrected** |
 | v0.6.5 | Does learned opportunity remain after known canonicalization and analytic structural transport? | Held-out depth 8: `512 views -> 256 physical circuits -> 50 exact classes`, identical D-optimality, zero Bernoulli shots. The operational oracle was also 50 classes. | **Generic structural baseline passed; learned-discovery suitability failed** |
+| v0.6.6 | Do external mutation-test matrices contain a hidden exact quotient suitable for prospective certification? | Lang, Math and Time had 43–87% exact held-out compression with preserved mutation coverage, but Closure retained only 67 eligible tests. Generic development signatures made 51,316 held-out false merges. | **Full suitability gate failed; three matrices expose a real target** |
 | DREAM4 | Does intervention identity carry directed mechanism information on a third-party executable benchmark? | Official Size100 confirmatory gate not yet run. | **Pending** |
 
 ## Strongest current claim
 
-> A fixed observational boundary can hide mechanism distinctions that become visible under another legitimate boundary. Exact, task-preserving orientation structure can also remove substantial redundant experimental computation when that structure is known. However, no external benchmark currently demonstrates that an OARL-specific learner can discover a useful safe quotient more effectively than generic structural canonicalization or established optimal-design machinery.
+> A fixed observational boundary can hide mechanism distinctions that become visible under another legitimate boundary. Exact, task-preserving orientation structure can also remove substantial redundant experimental computation. External mutation matrices now expose a substantial hidden quotient, but no external benchmark yet demonstrates that an OARL-specific learner can discover it safely and more efficiently than generic baselines.
 
 That is deliberately narrower than claiming a general causal-discovery or equivalence-discovery algorithm.
+
+## v0.6.6 external mutation suitability result
+
+The preregistered gate used independently authored Defects4J mutant-test kill matrices. Tests are candidate experiments; exact equality of held-out mutant kill vectors defines the evaluator relation.
+
+| Matrix | Eligible tests | Oracle classes | Compression | Development-signature false merges | RAW → oracle score evaluations |
+|---|---:|---:|---:|---:|---:|
+| Closure-118 | 67 | 56 | 16.42% | 1 | 1,102 → 893 |
+| Lang-33 | 258 | 147 | **43.02%** | 51 | 4,970 → 2,750 |
+| Math-22 | 225 | 114 | **49.33%** | 182 | 2,847 → 1,404 |
+| Time-6 | 1,225 | 165 | **86.53%** | 51,082 | 24,310 → 3,110 |
+
+The full gate failed because every matrix was required to retain at least 200 eligible tests and Closure-118 retained 67. The other three matrices show the first strong external residual target that is neither a metadata duplicate nor exactly calculable from a public model. This is benchmark evidence, not an OARL algorithm win.
+
+See [`evidence/v066/V066_RESULT.md`](evidence/v066/V066_RESULT.md).
 
 ## v0.6.5 decisive structural audit
 
@@ -92,6 +108,8 @@ See [`evidence/v05b/V05B_CONFIRMATORY_REPORT.md`](evidence/v05b/V05B_CONFIRMATOR
 - End-to-end savings for finite-noise certification, including certificate acquisition cost, have not yet been demonstrated against exhaustive Generic OED.
 - v0.6.5 does not establish learned equivalence discovery: its successful method uses public model structure and is a generic analytic baseline.
 - The pyGSTi circuit family is not a valid remaining test of OARL-specific learned quotient discovery once known analytic transport is admitted.
+- v0.6.6 does not test an OARL-specific learner; its mutation matrices establish a target, not a learned advantage.
+- Exact equality on development mutant signatures is not safe evidence of held-out equivalence.
 - The official DREAM4 Size100 confirmatory gate remains pending.
 
 ## Repository map
@@ -114,7 +132,9 @@ evidence/v062/            Fisher information-span audit
 evidence/v063/            frozen response-level safe-quotient failure
 evidence/v064/            frozen task-aligned gate plus evaluator correction
 evidence/v065/            structural-baseline and evaluator audit
+evidence/v066/            external mutation suitability preregistration and result
 external/historical/      Meselson–Stahl and Luria–Delbrück replay
+external/mutation/v066/   pinned compact mutant-test kill matrices and provenance
 external/dream4/v01/      original frozen DREAM4 harness
 external/dream4/v02/      preregistration-aligned corrected harness
 paper/                     August 2026 working paper
@@ -145,6 +165,13 @@ python scripts/run_v064_task_aligned_gate.py
 python scripts/run_v065_structural_baseline_audit.py
 ```
 
+For the external mutation suitability gate:
+
+```bash
+pytest -q tests/test_mutation_equivalence.py
+python scripts/run_v066_mutation_suitability.py
+```
+
 For DREAM4:
 
 ```bash
@@ -154,10 +181,10 @@ python external/dream4/v02/run_dream4_gate.py --root /path/to/DREAM4 --size 100 
 
 ## Research integrity
 
-Negative results are first-class evidence here. Earlier versions are not deleted when a hypothesis fails, and corrections are versioned rather than silently rewriting frozen apparatus. The failed v0.5B pilot, the CSuite benchmark-suitability failure, the failed v0.6.1/v0.6.3/v0.6.4 gates and the v0.6.5 pyGSTi learned-discovery suitability failure remain documented.
+Negative results are first-class evidence here. Earlier versions are not deleted when a hypothesis fails, and corrections are versioned rather than silently rewriting frozen apparatus. The failed v0.5B pilot, the CSuite benchmark-suitability failure, the failed v0.6.1/v0.6.3/v0.6.4 gates, the v0.6.5 pyGSTi learned-discovery suitability failure and the v0.6.6 four-matrix suitability failure remain documented.
 
 The authoritative claim-by-claim status is in [`docs/CLAIMS_AND_EVIDENCE.md`](docs/CLAIMS_AND_EVIDENCE.md).
 
 ## Status
 
-Research prototype. **No external OARL-specific learned-discovery advantage is currently established.** v0.6.5 exhausted the pyGSTi opportunity with generic analytic transport, so the next gate must use a genuinely black-box external family whose redundant admissible views are neither metadata duplicates nor exactly recoverable from a supplied model. Until then, the strongest surviving contribution is the boundary-relative identifiability and structural-audit framework—not a competitive learned algorithm.
+Research prototype. **No external OARL-specific learned-discovery advantage is currently established.** v0.6.6 found a promising black-box target in mutation-test matrices, but its full suitability gate failed and no learner was tested. The next valid step is a new-fault prospective certification gate—not reuse of the inspected held-out columns.

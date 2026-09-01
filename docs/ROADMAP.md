@@ -131,9 +131,25 @@ Interpretation: generic analytic transport completely solves this ideal Clifford
 
 See `evidence/v065/V065_RESULT.md`.
 
-## Next: v0.6.6 — black-box benchmark suitability and freeze
+## Completed: v0.6.6 — black-box mutation-matrix suitability gate
 
-Do not build another adaptive certificate until a new external family passes a suitability screen.
+v0.6.6 screened independently authored Defects4J mutant-test kill matrices. Tests were candidate experiments and held-out mutant kill vectors supplied an exact, non-numerical task-equivalence relation.
+
+Frozen result: **overall suitability gate failed** because `Closure-118` retained only 67 development-active eligible tests, below the required 200. The other three matrices exposed strong exact oracle compression:
+
+- Lang-33: 258 eligible tests → 147 exact held-out classes, 43.02% compression;
+- Math-22: 225 → 114, 49.33% compression;
+- Time-6: 1,225 → 165, 86.53% compression.
+
+All exact oracle quotients preserved the fixed greedy maximum-coverage result. Generic development-signature grouping was unsafe, producing 51,316 held-out false merge pairs across the four matrices.
+
+Interpretation: the four-matrix preregistered gate failed, but mutation testing is the first external domain in this programme to expose both large hidden task redundancy and a real finite-evidence generalization problem beyond metadata or an exposed analytic model.
+
+See `evidence/v066/V066_RESULT.md`.
+
+## Next: v0.6.7 — prospective mutation-equivalence certification
+
+The inspected v0.6.6 held-out columns cannot be reused for a prospective learned claim. Select new fault matrices using development-only activity, then freeze the target faults and mutant splits before fitting or evaluating a learner.
 
 ### Required benchmark properties
 
@@ -147,9 +163,9 @@ The next family must provide:
 6. a held-out family whose task truth was not used to design the learner;
 7. realistic shared-observation and wall-clock cost accounting.
 
-Candidate domains should be screened before algorithm work. A benchmark-suitability failure must be preserved rather than repaired by manufacturing duplicate views.
+Candidate faults must be screened using development-only activity before algorithm work. A benchmark-suitability failure must be preserved rather than repaired by manufacturing duplicate views.
 
-### Only after suitability passes
+### Frozen comparator burden
 
 Preregister structural proposal plus adaptive task certification against:
 
@@ -159,7 +175,7 @@ Preregister structural proposal plus adaptive task certification against:
 - generic sequential confidence testing;
 - RAW and evaluator-only oracle bounds.
 
-The learned method must strictly improve the zero-false-merge compression/cost frontier. Otherwise narrow OARL to the boundary-relative identifiability and structural-audit framework.
+The learned method must strictly improve the zero-false-merge compression/cost frontier. Evidence cost must count test-mutant executions, and end-to-end economics require measured execution time rather than binary-cell counts alone. Otherwise narrow OARL to the boundary-relative identifiability and structural-audit framework.
 
 ## Paper programme
 
@@ -174,9 +190,10 @@ The paper should preserve the failure sequence rather than hide it:
 5. v0.6.3: response similarity gives useful compression but unsafe task merges;
 6. v0.6.4: task-aligned finite-Fisher certification collapses to zero useful coverage under its frozen numerical evaluator;
 7. v0.6.5: analytic transport reveals that the evaluator fragmented exact zero-Fisher classes and that generic known structure exhausts the held-out oracle without finite evidence;
-8. the remaining open question requires a genuinely black-box family rather than another pyGSTi retest.
+8. v0.6.6: external mutation matrices expose a genuine hidden redundancy target, but the four-matrix suitability gate fails because Closure-118 has too few eligible tests;
+9. the remaining open question is whether a prospective certifier can recover useful exact mutation-test equivalence with zero held-out false merges.
 
-Do not submit the manuscript as a strong algorithm paper. v0.6.5 closes the current pyGSTi line without establishing learned OARL utility. A new suitable external benchmark must first show a nontrivial residual target beyond generic structure.
+Do not submit the manuscript as a strong algorithm paper. v0.6.5 closes the pyGSTi line and v0.6.6 identifies a mutation-testing target without evaluating a learner. A new-fault prospective gate must establish safe incremental utility first.
 
 ## Still required: practical admissibility and end-to-end economics
 
