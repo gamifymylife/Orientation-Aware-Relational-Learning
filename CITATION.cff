@@ -1,0 +1,10 @@
+cff-version: 1.2.0
+message: "If you use this research code or evidence, please cite the repository and the associated working paper."
+title: "Orientation-Aware Relational Learning"
+type: software
+authors:
+  - family-names: "Price"
+    given-names: "Arthur Richard Meredith"
+repository-code: "https://github.com/gamifymylife/Orientation-Aware-Relational-Learning"
+date-released: 2026-08-31
+version: "0.4.0"

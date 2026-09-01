@@ -1,0 +1,27 @@
+{
+  "name": "Orientation-Aware Relational Learning Benchmark",
+  "version": "0.1.0",
+  "central_comparison": "full_oarl vs generic_oed over identical (orientation, intervention) space",
+  "primary_metrics": [
+    "N95",
+    "C95",
+    "success_95",
+    "correct_argmax",
+    "score_evals",
+    "runtime_s"
+  ],
+  "policies": [
+    "passive",
+    "fixed_oed",
+    "random_orientation",
+    "generic_oed",
+    "oarl_no_stability",
+    "full_oarl",
+    "oracle"
+  ],
+  "go_no_go": {
+    "useful_median_c95_reduction": 0.2,
+    "substantial_median_c95_reduction": 0.3,
+    "required_fraction_instances_positive": 0.75
+  }
+}

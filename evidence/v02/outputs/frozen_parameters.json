@@ -1,0 +1,7 @@
+{
+  "lambda_stability": 0.0,
+  "gamma_cost": 0.0,
+  "calibration_seed_start": 0,
+  "calibration_seed_end": 23,
+  "calibration_objective": 0.0
+}

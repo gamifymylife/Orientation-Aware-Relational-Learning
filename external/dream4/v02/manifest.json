@@ -1,0 +1,23 @@
+{
+  "project": "OARL DREAM4 External Gate",
+  "version": "0.2.0",
+  "frozen_date": "2026-08-31",
+  "primary_claim": "Intervention-response identity carries directed mechanism information beyond the same unlabeled measurements.",
+  "official_archive": "https://gnw.sourceforge.net/resources/DREAM4%20in%20silico%20challenge.zip",
+  "primary_size": 100,
+  "networks": [
+    1,
+    2,
+    3,
+    4,
+    5
+  ],
+  "erasure_repeats": 100,
+  "seed_base": 20260831,
+  "status": "preregistration-aligned correction; official Size100 confirmatory run pending",
+  "corrections": [
+    "hierarchical network-first bootstrap",
+    "exact preregistered erasure seed",
+    "modality-specific normalized-AUPRC pass criterion"
+  ]
+}

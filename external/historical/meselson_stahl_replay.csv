@@ -1,0 +1,7 @@
+case,experiment,orientation,information_gain_bits,cost_units,ig_per_cost,predictions
+Meselson-Stahl,generation_1,mean_density_only,0.0,1,0.0,"{'conservative': 0.5, 'semiconservative': 0.5, 'dispersive': 0.5}"
+Meselson-Stahl,generation_1,full_band_distribution,0.9182958340544894,1,0.9182958340544894,"{'conservative': ((0.0, 0.5), (1.0, 0.5)), 'semiconservative': ((0.5, 1.0),), 'dispersive': ((0.5, 1.0),)}"
+Meselson-Stahl,generation_2,mean_density_only,0.0,2,0.0,"{'conservative': 0.25, 'semiconservative': 0.25, 'dispersive': 0.25}"
+Meselson-Stahl,generation_2,full_band_distribution,1.584962500721156,2,0.792481250360578,"{'conservative': ((0.0, 0.75), (1.0, 0.25)), 'semiconservative': ((0.0, 0.5), (0.5, 0.5)), 'dispersive': ((0.25, 1.0),)}"
+Meselson-Stahl,generation_3,mean_density_only,0.0,3,0.0,"{'conservative': 0.125, 'semiconservative': 0.125, 'dispersive': 0.125}"
+Meselson-Stahl,generation_3,full_band_distribution,1.584962500721156,3,0.5283208335737187,"{'conservative': ((0.0, 0.875), (1.0, 0.125)), 'semiconservative': ((0.0, 0.75), (0.5, 0.25)), 'dispersive': ((0.125, 1.0),)}"

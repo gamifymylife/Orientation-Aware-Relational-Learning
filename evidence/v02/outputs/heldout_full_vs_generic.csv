@@ -1,0 +1,6 @@
+condition,n_pairs,median_penalized_c95_reduction,bootstrap_lo,bootstrap_hi,fraction_full_oarl_cheaper
+informative_unstable,100,0.0,0.0,0.0,0.0
+no_orientation_value,100,0.0,0.0,0.0,0.0
+orientation_exclusive,100,0.0,0.0,0.0,0.0
+standard_clean,100,0.0,0.0,0.0,0.0
+standard_misspecified,100,0.0,0.0,0.0,0.0

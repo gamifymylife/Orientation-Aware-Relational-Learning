@@ -1,0 +1,43 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>OARL Benchmark v0.1 — Quick Dashboard</title>
+<style>
+body{font-family:system-ui,-apple-system,sans-serif;max-width:1100px;margin:40px auto;padding:0 20px;line-height:1.45}
+h1{margin-bottom:8px}
+.note{padding:12px 16px;border:1px solid #aaa;border-radius:8px;margin:16px 0}
+table{border-collapse:collapse;width:100%;margin-top:20px}
+th,td{border-bottom:1px solid #ddd;padding:8px;text-align:right}
+th:first-child,td:first-child{text-align:left}
+.good{font-weight:700}
+small{opacity:.75}
+</style>
+</head>
+<body>
+<h1>Orientation-Aware Benchmark v0.1</h1>
+<p>Quick smoke-test dashboard. This is not publication evidence.</p>
+<div class="note">
+<strong>Critical comparison:</strong> Full OARL median paired C95 reduction vs Generic OED:
+<strong>-13.6%</strong> (95% bootstrap CI -66.2% to 19.5%).
+</div>
+<table id="tbl"><thead><tr>
+<th>Policy</th><th>Success</th><th>Correct</th><th>Median N95</th><th>Median C95</th><th>Mean score evals</th><th>Runtime (s)</th>
+</tr></thead><tbody></tbody></table>
+<script>
+const rows=[{"policy": "fixed_oed", "success_rate": 0.0, "correct_rate": 0.0625, "median_n95": 36.0, "median_c95": 31.209142, "mean_score_evals": 350.0, "mean_runtime_s": 0.002821}, {"policy": "full_oarl", "success_rate": 0.140625, "correct_rate": 0.53125, "median_n95": 36.0, "median_c95": 18.577892, "mean_score_evals": 2477.5, "mean_runtime_s": 0.017699}, {"policy": "generic_oed", "success_rate": 0.765625, "correct_rate": 0.84375, "median_n95": 13.5, "median_c95": 15.514519, "mean_score_evals": 1345.0, "mean_runtime_s": 0.009199}, {"policy": "oarl_no_stability", "success_rate": 0.59375, "correct_rate": 0.8125, "median_n95": 20.5, "median_c95": 12.644184, "mean_score_evals": 1655.0, "mean_runtime_s": 0.011571}, {"policy": "oracle", "success_rate": 0.796875, "correct_rate": 0.9375, "median_n95": 11.5, "median_c95": 12.344387, "mean_score_evals": 1265.0, "mean_runtime_s": 0.012971}, {"policy": "passive", "success_rate": 0.0, "correct_rate": 0.0625, "median_n95": 36.0, "median_c95": 32.140799, "mean_score_evals": 0.0, "mean_runtime_s": 0.000519}, {"policy": "random_orientation", "success_rate": 0.375, "correct_rate": 0.765625, "median_n95": 36.0, "median_c95": 38.488634, "mean_score_evals": 0.0, "mean_runtime_s": 0.000472}];
+const tbody=document.querySelector("#tbl tbody");
+for(const r of rows){
+  const tr=document.createElement("tr");
+  tr.innerHTML=`<td>${r.policy}</td>
+  <td>${(100*r.success_rate).toFixed(1)}%</td>
+  <td>${(100*r.correct_rate).toFixed(1)}%</td>
+  <td>${r.median_n95.toFixed(1)}</td>
+  <td>${r.median_c95.toFixed(3)}</td>
+  <td>${r.mean_score_evals.toFixed(1)}</td>
+  <td>${r.mean_runtime_s.toFixed(4)}</td>`;
+  tbody.appendChild(tr);
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,3 @@
+external_case,candidate_mechanisms,fixed_boundary_result,max_fixed_boundary_IG_bits,best_alternate_boundary,max_alternate_boundary_IG_bits,historical_replay_result,external_validation
+Meselson-Stahl 1958,3,Mean density identical under all three models,0.0,Full band distribution,1.584963,"Gen1 leaves ['semiconservative', 'dispersive']; Gen2 leaves ['semiconservative']",PASS
+Luria-Delbruck 1943,2,Mean can be matched by both hypotheses,0.0,Preserve independent-culture distribution,1.0,Individual variance/mean=61.4; bulk=0.90; induced tail p≈1.12e-235,PASS
