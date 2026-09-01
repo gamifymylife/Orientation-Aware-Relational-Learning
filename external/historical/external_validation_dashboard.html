@@ -1,0 +1,47 @@
+<!doctype html><html><head><meta charset="utf-8"><title>OARL External Validation v0.1</title>
+<style>body{font-family:system-ui;max-width:980px;margin:40px auto;padding:0 20px;line-height:1.45}
+.card{border:1px solid #ddd;border-radius:14px;padding:20px;margin:18px 0} .metric{font-size:32px;font-weight:750}
+table{border-collapse:collapse;width:100%}td,th{padding:8px;border-bottom:1px solid #ddd;text-align:left}</style></head><body>
+<h1>OARL External Historical Validation v0.1</h1>
+<div class="card"><h2>Meselson–Stahl</h2><div class="metric">0 → 1.585 bits</div>
+<p>Mean density destroys the mechanism distinction. Full generation-2 band structure separates all three historical models.</p>
+<p>['conservative', 'semiconservative', 'dispersive'] → ['semiconservative', 'dispersive'] → <strong>['semiconservative']</strong></p></div>
+<div class="card"><h2>Luria–Delbrück</h2><div class="metric">0 → 1 bit</div>
+<p>Mean-only readout is non-identifying in the abstraction. Preserving independent cultures exposes the jackpot variance.</p>
+<p>Variance/mean: independent <strong>61.4</strong>, bulk <strong>0.90</strong>.</p></div>
+<h2>Summary</h2><table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>external_case</th>
+      <th>candidate_mechanisms</th>
+      <th>fixed_boundary_result</th>
+      <th>max_fixed_boundary_IG_bits</th>
+      <th>best_alternate_boundary</th>
+      <th>max_alternate_boundary_IG_bits</th>
+      <th>historical_replay_result</th>
+      <th>external_validation</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Meselson-Stahl 1958</td>
+      <td>3</td>
+      <td>Mean density identical under all three models</td>
+      <td>0.0</td>
+      <td>Full band distribution</td>
+      <td>1.584963</td>
+      <td>Gen1 leaves ['semiconservative', 'dispersive']; Gen2 leaves ['semiconservative']</td>
+      <td>PASS</td>
+    </tr>
+    <tr>
+      <td>Luria-Delbruck 1943</td>
+      <td>2</td>
+      <td>Mean can be matched by both hypotheses</td>
+      <td>0.0</td>
+      <td>Preserve independent-culture distribution</td>
+      <td>1.000000</td>
+      <td>Individual variance/mean=61.4; bulk=0.90; induced tail p≈1.12e-235</td>
+      <td>PASS</td>
+    </tr>
+  </tbody>
+</table></body></html>

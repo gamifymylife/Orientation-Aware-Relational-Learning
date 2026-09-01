@@ -1,0 +1,8 @@
+{
+  "false_merge_1_of_8_correct_clean": 0.946,
+  "false_merge_1_of_8_correct_corrupt": 0.86,
+  "admissibility_one_invalid_reopened_correct_clean": 0.972,
+  "admissibility_one_invalid_reopened_correct_corrupt": 0.174,
+  "false_negative_25pct_correct_clean": 0.98,
+  "false_negative_25pct_correct_corrupt": 0.98
+}

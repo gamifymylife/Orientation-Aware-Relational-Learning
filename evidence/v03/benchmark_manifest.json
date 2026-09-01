@@ -1,0 +1,13 @@
+{
+  "project": "Orientation-Aware Benchmark",
+  "version": "0.3.0",
+  "gate": "Structural Gate-2",
+  "question": "Can exact relational orientation structure reduce redundant OED search without changing mechanism identification?",
+  "headline": {
+    "quotient_score_evaluation_reduction_24_to_4": 0.8333333333333334,
+    "paired_correctness_identical_fraction": 1.0,
+    "paired_n95_identical_fraction": 1.0,
+    "paired_cost_identical_fraction": 1.0
+  },
+  "note": "v0.3 outputs were regenerated from the frozen v0.4 run_v03.py during repository consolidation on 2026-08-31."
+}

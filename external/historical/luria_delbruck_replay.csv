@@ -1,0 +1,4 @@
+case,experiment,orientation,information_gain_bits,historical_mean,historical_variance,variance_to_mean
+Luria-Delbruck,independent_parallel_cultures,mean_only,0.0,11.3,694.0,61.41592920353982
+Luria-Delbruck,independent_parallel_cultures,preserve_cross_culture_distribution,1.0,11.3,694.0,61.41592920353982
+Luria-Delbruck,bulk_culture_aliquots,preserve_cross_sample_distribution,0.0,16.7,15.0,0.8982035928143713

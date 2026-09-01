@@ -1,0 +1,7 @@
+scale_O,policy,mean_score_evals,median_runtime_s,correct_rate
+16,generic_cost_tiebreak,1280.0,1.1029544960000095,0.6
+16,structured_oarl,320.0,0.2882487450000042,0.6
+32,generic_cost_tiebreak,2304.0,2.1323001720000008,0.2
+32,structured_oarl,288.0,0.251417735000004,0.2
+64,generic_cost_tiebreak,5120.0,4.424221158000009,0.4
+64,structured_oarl,320.0,0.27228155999999615,0.4

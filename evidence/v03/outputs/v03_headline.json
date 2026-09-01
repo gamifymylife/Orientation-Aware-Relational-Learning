@@ -1,0 +1,10 @@
+{
+  "quotient_score_eval_reduction_median": 0.8333333333333334,
+  "quotient_cost_identical_fraction": 1.0,
+  "quotient_n95_identical_fraction": 1.0,
+  "quotient_correct_identical_fraction": 1.0,
+  "asymmetry_generic_correct": 0.0,
+  "asymmetry_structured_correct": 0.98,
+  "asymmetry_generic_false_high_conf": 1.0,
+  "asymmetry_structured_false_high_conf": 0.0
+}

@@ -2,85 +2,80 @@
 
 > **Mechanism identifiability can depend on the boundary from which a system is interrogated.**
 
-Orientation-Aware Relational Learning is a research programme for representing, comparing, and actively selecting different admissible input/output orientations of the same underlying relation.
+OARL is a falsification-oriented research programme about **boundary-aware mechanism identification**: when the same latent relation can be interrogated through multiple admissible input/output orientations, which distinctions are real, which are representational, and which experimental views are redundant?
 
-The current project asks three increasingly strong questions:
+The programme has changed materially as evidence accumulated. The original special acquisition score did **not** survive its confirmatory benchmark. The strongest surviving direction is now **certified structural compression**: discover or certify when experimental orientations are equivalent/admissible, quotient only those distinctions that are safe to remove, and otherwise abstain.
 
-1. **Exposure:** can a mechanism distinction be invisible from one observational boundary and visible from another?
-2. **Compression:** can equivalent orientations be quotient-ed so experimental design searches fewer redundant candidates without changing the inference result?
-3. **Certification:** how accurately must equivalence/admissibility structure be known before that compression becomes unsafe?
+## What the evidence currently supports
 
-## Current evidence
+| Version | Question | Result | Status |
+|---|---|---|---|
+| v0.1 | Does changing orientation expose hidden mechanism distinctions? | Orientation search beat a fixed boundary in controlled worlds; the proposed full scoring rule did not beat generic OED. | Support for boundary value; warning on scoring |
+| v0.2 | Does the static stability/cost penalty improve generic OED? | Frozen calibration selected `lambda=0, gamma=0`; Full OARL became Generic OED. | **Falsified** |
+| v0.3 | Can exact equivalence remove redundant OED computation? | 24→4 quotient preserved paired outcomes and cut score evaluations **83.3%**; scaling reached **98.4%** at 256→4. | **Supported conditionally on correct structure** |
+| v0.4 | What happens when structural metadata is wrong? | False splits mostly cost efficiency; false merges and invalid-as-valid errors can damage correctness severely. | **Supported in controlled stress tests** |
+| Historical | Is boundary-dependent identifiability an internally invented phenomenon? | Meselson–Stahl and Luria–Delbrück can be replayed as coarse-vs-structure-preserving boundary cases. | External historical support for the narrow boundary claim |
+| DREAM4 | Does intervention identity carry directed mechanism information on a third-party executable benchmark? | Official Size100 confirmatory gate not yet run. | **Pending** |
 
-The evidence is deliberately mixed rather than uniformly positive.
+## Strongest current claim
 
-- **v0.1:** orientation search clearly beat fixed-boundary acquisition on controlled worlds, but the proposed stability-aware scoring rule did not beat generic OED.
-- **v0.2:** frozen calibration selected `lambda = 0, gamma = 0`; the static stability/cost penalty therefore added no defensible value over generic OED on the same action space.
-- **v0.3:** exact orientation quotienting preserved identification outcomes while cutting experiment-score evaluations by 83.3% in a 24→4 equivalence-class setting, and by 98.4% in a 256→4 scaling condition.
-- **v0.4:** false splits were mainly an efficiency loss, while false merges and false admissibility positives could materially damage correctness. This motivates conservative, abstention-friendly structural certification.
-- **Historical external replay:** Meselson–Stahl and Luria–Delbrück both exhibit boundary-dependent mechanism identifiability.
-- **DREAM4 external gate:** preregistered and ready to run on the official third-party benchmark. No DREAM4 result is claimed until the official data are executed through the frozen runner.
+> A fixed observational boundary can make distinct candidate mechanisms observationally equivalent; another legitimate boundary can expose the distinction. When multiple orientations are **certifiably equivalent**, exact quotienting can remove redundant acquisition computation without changing Bayesian mechanism-identification outcomes.
 
-## Core formal move
+## What is *not* established
 
-For an orientation set `O` and intervention set `A`, generic exhaustive experimental design searches
+- OARL is not a demonstrated state-of-the-art active causal-discovery algorithm.
+- The v0.2 stability/cost penalty does not improve generic OED on the tested action space.
+- No learned structural classifier currently produces trustworthy equivalence/admissibility certificates from raw evidence.
+- Approximate quotienting is not yet proven safe in arbitrary real systems.
+- End-to-end savings including the cost of discovering/certifying the quotient have not yet been demonstrated.
+- The official DREAM4 Size100 confirmatory gate remains pending.
 
-```text
-O × A
-```
-
-If a certified equivalence relation partitions orientations into classes, OARL can instead search
-
-```text
-(O / ~) × A
-```
-
-while transporting evidence through valid representation maps. Under exact bijective observation transformations, mutual information is invariant, so scoring every raw representative is redundant.
+That missing classifier/certifier is now the central research problem. See [`docs/ROADMAP.md`](docs/ROADMAP.md).
 
 ## Repository map
 
 ```text
-src/oarl_bench/           benchmark and inference code
-scripts/                  frozen benchmark runners
-tests/                    automated tests
-evidence/v02/             negative confirmatory result for static penalties
-evidence/v03/             quotient-search Gate-2 result
-evidence/v04/             structural-classifier robustness result
-external/historical/      historical external replay
-external/dream4/          preregistered DREAM4 external gate
+src/oarl_bench/           current v0.4 implementation
+scripts/                  current frozen v0.3/v0.4 runners
+tests/                    current automated tests
+archive/v01/              historical v0.1 code snapshot
+archive/v02/              historical v0.2 code snapshot
+evidence/v01/             v0.1 smoke evidence
+evidence/v02/             v0.2 negative confirmatory evidence
+evidence/v03/             exact quotient / Gate-2 evidence
+evidence/v04/             structural-metadata error evidence
+external/historical/      Meselson–Stahl and Luria–Delbrück replay
+external/dream4/v01/      original frozen DREAM4 harness
+external/dream4/v02/      preregistration-aligned corrected harness
+paper/                     August 2026 working paper
+docs/                      claims ledger, roadmap and provenance
 ```
 
-## Scientific claim boundary
+## Reproduce the current benchmark
 
-The strongest currently supported claim is:
-
-> **A fixed observational boundary can make distinct mechanisms observationally equivalent; changing to another legitimate boundary can expose the distinction. When multiple orientations are exactly equivalent, certified quotienting can remove redundant acquisition computation without changing the inference result.**
-
-The project does **not** yet claim that:
-
-- OARL is a new state-of-the-art active causal discovery algorithm;
-- the current structural classifier is externally validated;
-- approximate quotienting is safe in arbitrary real systems;
-- OARL beats generic OED on an established third-party executable benchmark;
-- a static stability penalty improves Bayesian experimental design.
-
-## Current external milestone
-
-The next confirmatory gate is the official **DREAM4 In Silico Network Challenge**. The preregistration compares the same knockout/knockdown response matrices with intervention identity preserved versus erased. This directly tests whether the intervention→response relation carries directed mechanism information beyond the unlabeled numerical measurements.
-
-See [`external/dream4/PREREGISTRATION.md`](external/dream4/PREREGISTRATION.md).
-
-## Reproducibility
-
-Python 3.11+ is recommended.
+Python 3.10+:
 
 ```bash
 python -m pip install -e '.[dev]'
 pytest -q
+PYTHONPATH=src python scripts/run_v03.py
+PYTHONPATH=src python scripts/run_v04.py
 ```
 
-The repository intentionally keeps frozen reports and compact result summaries, while excluding caches and very large raw Monte Carlo outputs.
+The v0.3 quadrature scaling run is intentionally computationally expensive. Frozen outputs are included under `evidence/v03/outputs/`.
+
+For DREAM4:
+
+```bash
+python -m pip install -e '.[dev,dream4]'
+pytest -q external/dream4/v02/tests
+python external/dream4/v02/run_dream4_gate.py --root /path/to/DREAM4 --size 100 --out external/dream4/v02/outputs
+```
+
+## Research integrity
+
+Negative results are first-class evidence here. Earlier versions are not deleted when a hypothesis fails, and corrections are versioned rather than silently rewriting frozen apparatus. The authoritative claim-by-claim status is in [`docs/CLAIMS_AND_EVIDENCE.md`](docs/CLAIMS_AND_EVIDENCE.md).
 
 ## Status
 
-Research prototype. The programme is intentionally falsification-oriented: failed hypotheses and negative benchmark results are retained as first-class evidence rather than removed after method changes.
+Research prototype. The next gate is **v0.5 — Certified Orientation Structure Discovery**.
