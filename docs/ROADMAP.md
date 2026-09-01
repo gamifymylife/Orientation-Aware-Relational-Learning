@@ -94,95 +94,72 @@ Primary checks:
 - OARL depth cost no greater than RAW: PASS;
 - OARL compression >=20%: **FAIL**.
 
-The family contains 3,842 evaluator-side task-equivalent pairs globally and 1,263 inside the learned shortlist, so the failure is not absence of structure. It is finite-evidence certification power.
+Under the frozen numerical evaluator, the family contained 3,842 view-level compatible pairs globally and 1,263 inside the learned shortlist. v0.6.5 later showed that this evaluator fragmented exact zero-Fisher classes, so these counts are preserved as evaluator-relative outputs rather than exact structural truth.
 
-The frozen learned methods consumed **1,930,400,000 Bernoulli shot units** each. FIM-UCB and OARL saved zero downstream score evaluations. Even FIM-POINT's small safe quotient required roughly **14.2 million shot units per D-opt score evaluation saved**.
+The frozen learned methods consumed **1,930,400,000 independently simulated view-shot units** each. FIM-UCB and OARL saved zero downstream score evaluations. Because ordinary/complement views are deterministic relabellings, shared physical acquisition would have been 965,200,000 shot units; the higher number remains the cost of the frozen implementation.
 
-Diagnostic: task alignment fixed the v0.6.3 wrong-object problem, but direct local derivative/Fisher estimation from independent finite shots is too noisy and data-hungry. Among true-equivalent shortlisted pairs, the median pooled Fisher point distance was ~0.225 and the median pooled Fisher bootstrap UCB ~0.593; no true pair passed the frozen pooled D-opt decision UCB.
+Historical diagnostic: task alignment fixed the v0.6.3 wrong-object problem relative to the frozen evaluator, but direct local derivative/Fisher estimation from independent finite shots was too noisy for the chosen envelope. v0.6.5 subsequently showed that finite evidence was not the only bottleneck: independent relabelling, near-zero numerical conditioning and an analytically solvable structural family were also confounded.
 
-See `evidence/v064/V064_RESULT.md`.
+See `evidence/v064/V064_RESULT.md` and `evidence/v064/EVALUATOR_CORRECTION_NOTE.md`.
 
-## Next: v0.6.5 — structural transport first, adaptive task certification second
+### Completed: v0.6.5 Structural Baseline and Evaluator Audit
 
-This is now the highest-priority scientific gate.
+v0.6.5 first tested whether the pyGSTi family still contained a legitimate learned-discovery target after admitting the strongest generic known-structure baseline.
 
-### Decisive question
+The gate corrected three confounds before evaluating utility:
 
-> Can a cheap structural/transport proposal stage identify high-probability equivalence candidates, then allocate task-aligned evidence sequentially only where needed, achieving nontrivial safe compression at materially lower evidence cost than exhaustive pairwise Fisher certification?
+1. ordinary/complement views were separated as deterministic relabellings rather than independent physical candidates;
+2. analytic integer/half-integer `SO(3)` transport replaced central finite differences as the exact evaluator;
+3. exact and operational relations were tested for transitivity and insertion-order stability before quotient language was used.
 
-The next method must not simply multiply IID samples across every view × probe cell. v0.6.4 shows that route is economically poor even before broader deployment concerns.
+The confirmatory family was all 256 gate words at held-out depth 8.
 
-### Required architecture
+Result:
 
-```text
-candidate experimental views
-        ↓
-cheap structural / transform proposal
-        ↓
-small candidate equivalence graph
-        ↓
-sequential task-aligned evidence
-        ↓
-EQUIVALENT | DISTINCT | UNKNOWN
-        ↓
-complete-link safe quotient
-        ↓
-unchanged D-optimal optimizer
-```
+- RAW-VIEWS: 512 classes, logdet 12.3273695, 4,096 score evaluations;
+- VIEW-CANONICAL: 256 physical classes, identical logdet, 2,048 score evaluations;
+- generic STRUCTURAL-TRANSPORT: **50 exact classes**, **80.47% physical compression**, identical logdet, 400 score evaluations, zero Bernoulli shots;
+- OPERATIONAL-ORACLE: exactly the same 50 classes and downstream result;
+- exact and operational relations were reflexive, symmetric and transitive;
+- 257 insertion orders all produced 50 classes and the same downstream result.
 
-### Structural proposal stage
+The structural-baseline utility gate passed. The learned-discovery suitability gate failed because residual oracle compression beyond the generic structural baseline was **0%**. The adaptive learned stage was therefore not run.
 
-Use only benchmark-neutral observable structure. Candidate mechanisms to test include:
+The retrospective v0.6.4 correction found 58 analytic physical classes rather than 91 legacy finite-difference classes. The old evaluator missed 3,261 of 4,158 analytically exact equivalent physical pairs because tiny numerical matrices around true zero Fisher norm were compared with a purely relative metric.
 
-- outcome-label permutation / complement hypotheses;
-- canonicalized response signatures;
-- transport consistency across mechanism probes;
-- symmetry/canonicalization baselines;
-- learned transform proposals without evaluator metadata.
+Interpretation: generic analytic transport completely solves this ideal Clifford family. That supports structural canonicalization but cannot support an OARL-specific learned algorithm claim. The pyGSTi line is closed for learned-discovery utility.
 
-The proposal stage may improve recall/cost but cannot itself declare a safe merge unless the transform is exact by construction.
+See `evidence/v065/V065_RESULT.md`.
 
-### Adaptive certification stage
+## Next: v0.6.6 — black-box benchmark suitability and freeze
 
-Instead of collecting the same probe budget everywhere:
+Do not build another adaptive certificate until a new external family passes a suitability screen.
 
-1. start with a small frozen pilot shot budget per proposed pair;
-2. estimate task/Fisher distortion uncertainty;
-3. stop early as `DISTINCT` when a margin is crossed;
-4. stop early as `EQUIVALENT` only when the task-distortion upper bound is inside tolerance;
-5. otherwise allocate another evidence batch up to a preregistered cap;
-6. unresolved pairs remain `UNKNOWN`.
+### Required benchmark properties
 
-Report the full distribution of evidence spent per pair, not only total runtime.
+The next family must provide:
 
-### Mandatory baselines
+1. at least 200 genuinely distinct physical candidate experiments after deterministic metadata canonicalization;
+2. at least 20% task-preserving oracle compression beyond all known generic structural/canonicalization baselines;
+3. transformations that are not directly supplied by candidate identifiers or exactly calculable from an exposed simulator;
+4. a trustworthy analytic, symbolic or independently converged evaluator that remains well-conditioned at zero information;
+5. an exact equivalence relation, or explicit safe-substitution graph semantics if approximate compatibility is non-transitive;
+6. a held-out family whose task truth was not used to design the learner;
+7. realistic shared-observation and wall-clock cost accounting.
 
-At minimum:
+Candidate domains should be screened before algorithm work. A benchmark-suitability failure must be preserved rather than repaired by manufacturing duplicate views.
 
-- RAW;
-- ORACLE;
-- exact/known transform canonicalization where applicable;
-- generic nearest-signature + sequential confidence testing;
-- generic pooled FIM sequential UCB;
-- OARL transform-proposal + task-XFIT sequential certification.
+### Only after suitability passes
 
-If a generic transform/canonicalization pipeline dominates, narrow the OARL-specific claim.
+Preregister structural proposal plus adaptive task certification against:
 
-### Primary gate
+- deterministic canonicalization;
+- generic symmetry/transform discovery;
+- generic nearest-signature proposal;
+- generic sequential confidence testing;
+- RAW and evaluator-only oracle bounds.
 
-Require simultaneously:
-
-1. zero operational task-false merges;
-2. >=20% compression;
-3. downstream D-opt logdet within the frozen tolerance of RAW;
-4. no greater selected depth cost than RAW;
-5. at least **10× lower finite-evidence cost** than the v0.6.4 exhaustive 1.9304B-shot reference, unless the downstream score cost independently justifies a smaller reduction.
-
-The 10× target is a new v0.6.5 prospective requirement, not a reinterpretation of v0.6.4.
-
-### Kill / narrowing criterion
-
-If safe compression still requires evidence on the order of exhaustive acquisition, the project should stop presenting external finite-noise quotient discovery as an efficiency method. The surviving contribution would then be the boundary-relative identifiability / structural-audit framework and exact/synthetic quotienting results.
+The learned method must strictly improve the zero-false-merge compression/cost frontier. Otherwise narrow OARL to the boundary-relative identifiability and structural-audit framework.
 
 ## Paper programme
 
@@ -195,10 +172,11 @@ The paper should preserve the failure sequence rather than hide it:
 3. v0.6.1: confidence can outpace boundary adequacy;
 4. v0.6.2: a new boundary adds rank that 1000× repetition cannot, while D-optimality already handles the local selection problem;
 5. v0.6.3: response similarity gives useful compression but unsafe task merges;
-6. v0.6.4: task-aligned Fisher certification repairs safety but collapses to zero useful coverage under conservative finite uncertainty;
-7. v0.6.5 therefore tests whether structural transport + selective evidence can recover the oracle opportunity economically.
+6. v0.6.4: task-aligned finite-Fisher certification collapses to zero useful coverage under its frozen numerical evaluator;
+7. v0.6.5: analytic transport reveals that the evaluator fragmented exact zero-Fisher classes and that generic known structure exhausts the held-out oracle without finite evidence;
+8. the remaining open question requires a genuinely black-box family rather than another pyGSTi retest.
 
-Do not submit the manuscript as a strong algorithm paper until v0.6.5 or an equivalent independent gate resolves the safety/coverage/cost frontier.
+Do not submit the manuscript as a strong algorithm paper. v0.6.5 closes the current pyGSTi line without establishing learned OARL utility. A new suitable external benchmark must first show a nontrivial residual target beyond generic structure.
 
 ## Still required: practical admissibility and end-to-end economics
 
