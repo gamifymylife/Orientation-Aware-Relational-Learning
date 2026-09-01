@@ -1,9 +1,12 @@
 import json
+import re
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 REGISTRY = ROOT / "evidence" / "v07" / "external" / "CANDIDATE_REGISTRY.json"
 LOCK = ROOT / "evidence" / "v07" / "external" / "CONFIRMATION_LOCK.json"
+HEX40 = re.compile(r"^[0-9a-f]{40}$")
+HEX64 = re.compile(r"^[0-9a-f]{64}$")
 
 
 def load_registry():
@@ -47,6 +50,25 @@ def test_registry_counts_are_self_consistent():
         c["v07_status"] == "NEEDS_ACTUAL_REVISION_REPLAY" for c in rows
     )
     assert counts["rejected"] == sum(c["v07_status"].startswith("REJECTED_") for c in rows)
+
+
+def test_replay_verified_cases_have_frozen_exact_provenance():
+    data = load_registry()
+    verified = [c for c in data["candidates"] if c["v07_status"] == "REPLAY_VERIFIED_NEEDS_V07_PREFLIGHT"]
+    assert len(verified) == data["counts"]["actual_revision_replay_verified"]
+    for case in verified:
+        assert case["repository"]
+        assert HEX40.fullmatch(case["pre_fix_revision"])
+        assert HEX40.fullmatch(case["post_fix_revision"])
+        assert case["pre_fix_revision"] != case["post_fix_revision"]
+        assert case["stable_repeats"] >= 3
+        assert HEX64.fullmatch(case["replay_evidence_sha256"])
+        assert HEX40.fullmatch(case["source_eligibility_blob_sha"])
+
+
+def test_source_candidate_pool_is_blob_pinned():
+    data = load_registry()
+    assert HEX40.fullmatch(data["source_program"]["artifact_blob_sha"])
 
 
 def test_launch_threshold_is_not_claimed_from_candidates_alone():
