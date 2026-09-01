@@ -3,9 +3,11 @@ from __future__ import annotations
 import argparse
 import csv
 import hashlib
+import io
 import json
 from pathlib import Path
 import urllib.request
+import zipfile
 
 import numpy as np
 
@@ -17,16 +19,39 @@ from oarl_bench.csuite import (
 )
 
 
-PILOT_DATASETS = ("lingauss", "nonlin_simpson", "cat_chain")
-BASE_URL = "https://azuastoragepublic.blob.core.windows.net/datasets"
+PILOT_DATASETS = ("lingauss", "nonlin_simpson", "cat_to_cts")
+RELEASE = "v0.1"
+BASE_URL = f"https://github.com/microsoft/csuite/releases/download/{RELEASE}"
 
 
-def _download(url: str, destination: Path) -> str:
+def _download_release_interventions(dataset: str, destination: Path) -> tuple[str, str]:
+    """Download the pinned CSuite release ZIP and extract interventions.json.
+
+    GitHub release assets are used instead of the historical Azure mirror so the
+    external pilot is reproducible from the same upstream repository/version cited
+    by CSuite itself.
+    """
+
+    url = f"{BASE_URL}/csuite_{dataset}.zip"
+    request = urllib.request.Request(url, headers={"User-Agent": "oarl-v06-pilot"})
+    with urllib.request.urlopen(request, timeout=120) as response:
+        archive_bytes = response.read()
+    archive_sha256 = hashlib.sha256(archive_bytes).hexdigest()
+
+    with zipfile.ZipFile(io.BytesIO(archive_bytes)) as archive:
+        candidates = [
+            name for name in archive.namelist() if name.rstrip("/").endswith("interventions.json")
+        ]
+        if len(candidates) != 1:
+            raise RuntimeError(
+                f"expected exactly one interventions.json in {dataset} release archive; "
+                f"found {candidates}"
+            )
+        data = archive.read(candidates[0])
+
     destination.parent.mkdir(parents=True, exist_ok=True)
-    with urllib.request.urlopen(url, timeout=120) as response:
-        data = response.read()
     destination.write_bytes(data)
-    return hashlib.sha256(data).hexdigest()
+    return archive_sha256, hashlib.sha256(data).hexdigest()
 
 
 def _finite(values: list[float]) -> list[float]:
@@ -42,7 +67,7 @@ def main() -> None:
 
     manifest: dict[str, object] = {
         "upstream": "microsoft/csuite",
-        "upstream_release": "v0.1",
+        "upstream_release": RELEASE,
         "purpose": "adapter/pilot only; not confirmatory evidence",
         "pilot_datasets": list(PILOT_DATASETS),
         "files": {},
@@ -52,9 +77,13 @@ def main() -> None:
 
     for dataset in PILOT_DATASETS:
         path = args.cache / dataset / "interventions.json"
-        url = f"{BASE_URL}/csuite_{dataset}/interventions.json"
-        sha256 = _download(url, path)
-        manifest["files"][dataset] = {"url": url, "sha256": sha256}
+        url = f"{BASE_URL}/csuite_{dataset}.zip"
+        archive_sha256, interventions_sha256 = _download_release_interventions(dataset, path)
+        manifest["files"][dataset] = {
+            "release_asset_url": url,
+            "release_archive_sha256": archive_sha256,
+            "interventions_sha256": interventions_sha256,
+        }
 
         views = load_csuite_interventions(path, system_id=dataset)
         signatures = discovery_signatures(views)
