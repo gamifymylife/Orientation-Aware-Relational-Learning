@@ -1,0 +1,50 @@
+name: v0.5B confirmatory gate
+
+on:
+  push:
+    branches: [v05-certified-structure-discovery]
+    paths:
+      - 'src/oarl_bench/noisy_certification.py'
+      - 'tests/test_noisy_certification_v05b.py'
+      - 'scripts/run_v05b.py'
+      - 'evidence/v05b/PREREGISTRATION.md'
+      - '.github/workflows/v05b-gate.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  confirm:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: v05-certified-structure-discovery
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+      - name: Install
+        run: python -m pip install -e '.[dev,dream4]'
+      - name: Safety unit gate
+        run: pytest -q tests/test_noisy_certification_v05b.py
+      - name: Run preregistered held-out gate
+        run: python scripts/run_v05b.py
+      - name: Freeze result tables
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add evidence/v05b/outputs
+          git commit -m "Record v0.5B.1 confirmatory evidence" || true
+          git push origin HEAD:v05-certified-structure-discovery
+      - name: Enforce preregistered gate
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          summary = json.loads(Path('evidence/v05b/outputs/v05b_summary.json').read_text())
+          print(json.dumps(summary, indent=2, sort_keys=True))
+          if not summary['gate_pass']:
+              raise SystemExit('v0.5B.1 preregistered gate FAILED')
+          PY
