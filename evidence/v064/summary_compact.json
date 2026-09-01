@@ -1,0 +1,97 @@
+{
+  "candidate_views": 508,
+  "incremental_utility_observed": false,
+  "methods": {
+    "FIM-POINT": {
+      "abstention_fraction": 0.0,
+      "break_even_score_cost_shots": 14194117.647058824,
+      "compression_fraction": 0.03346456692913391,
+      "downstream_logdet": 11.314181542250976,
+      "downstream_logdet_loss_vs_raw": 0.0,
+      "downstream_score_evaluations": 3928,
+      "false_task_merges": 0,
+      "n_classes": 491,
+      "pair_precision": 1.0,
+      "pair_recall_global": 0.005465903175429464,
+      "selected_total_depth_cost": 56
+    },
+    "FIM-UCB": {
+      "abstention_fraction": 0.27408572552103816,
+      "break_even_score_cost_shots": null,
+      "compression_fraction": 0.0,
+      "downstream_logdet": 11.314181542250976,
+      "downstream_logdet_loss_vs_raw": 0.0,
+      "downstream_score_evaluations": 4064,
+      "false_task_merges": 0,
+      "n_classes": 508,
+      "pair_precision": null,
+      "pair_recall_global": 0.0,
+      "selected_total_depth_cost": 56
+    },
+    "OARL-TASK-XFIT": {
+      "abstention_fraction": 0.27408572552103816,
+      "break_even_score_cost_shots": null,
+      "compression_fraction": 0.0,
+      "downstream_logdet": 11.314181542250976,
+      "downstream_logdet_loss_vs_raw": 0.0,
+      "downstream_score_evaluations": 4064,
+      "false_task_merges": 0,
+      "n_classes": 508,
+      "pair_precision": null,
+      "pair_recall_global": 0.0,
+      "selected_total_depth_cost": 56
+    },
+    "ORACLE": {
+      "abstention_fraction": null,
+      "break_even_score_cost_shots": null,
+      "compression_fraction": 0.8208661417322834,
+      "downstream_logdet": 11.314181542250976,
+      "downstream_logdet_loss_vs_raw": 0.0,
+      "downstream_score_evaluations": 728,
+      "false_task_merges": 0,
+      "n_classes": 91,
+      "pair_precision": null,
+      "pair_recall_global": null,
+      "selected_total_depth_cost": 56
+    },
+    "RAW": {
+      "abstention_fraction": null,
+      "break_even_score_cost_shots": null,
+      "compression_fraction": 0.0,
+      "downstream_logdet": 11.314181542250976,
+      "downstream_logdet_loss_vs_raw": 0.0,
+      "downstream_score_evaluations": 4064,
+      "false_task_merges": null,
+      "n_classes": 508,
+      "pair_precision": null,
+      "pair_recall_global": null,
+      "selected_total_depth_cost": 56
+    },
+    "TV-UCB": {
+      "abstention_fraction": 0.0,
+      "break_even_score_cost_shots": 638359.7883597884,
+      "compression_fraction": 0.7440944881889764,
+      "downstream_logdet": 11.04901495409735,
+      "downstream_logdet_loss_vs_raw": 0.26516658815362604,
+      "downstream_score_evaluations": 1040,
+      "false_task_merges": 1196,
+      "n_classes": 130,
+      "pair_precision": 0.513623424156161,
+      "pair_recall_global": 0.32873503383654346,
+      "selected_total_depth_cost": 52
+    }
+  },
+  "oarl_dominated_by": [],
+  "oracle_classes": 91,
+  "oracle_compression_fraction": 0.8208661417322834,
+  "primary_checks": {
+    "compression_ge_20pct": false,
+    "downstream_logdet_preserved": true,
+    "oracle_operational_quotient_preserves_raw": true,
+    "selected_depth_cost_no_greater_than_raw": true,
+    "zero_accepted_task_false_merges": true
+  },
+  "primary_safety_gate_pass": false,
+  "shortlist_recall": 0.32873503383654346,
+  "version": "v0.6.4-task-aligned-equivalence"
+}
