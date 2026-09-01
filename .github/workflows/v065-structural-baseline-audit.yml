@@ -1,0 +1,70 @@
+name: v0.6.5 structural baseline audit
+
+on:
+  pull_request:
+    paths:
+      - 'src/oarl_bench/structural_transport.py'
+      - 'scripts/run_v065_structural_baseline_audit.py'
+      - 'tests/test_structural_transport.py'
+      - 'evidence/v064/EVALUATOR_CORRECTION_NOTE.md'
+      - 'evidence/v065/**'
+      - '.github/workflows/v065-structural-baseline-audit.yml'
+  workflow_dispatch:
+
+jobs:
+  confirmatory:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install OARL
+        run: pip install -e '.[dev]'
+      - name: Install pinned pyGSTi
+        run: pip install 'pygsti==0.10.2'
+      - name: Run structural transport unit tests
+        run: pytest -q tests/test_structural_transport.py
+      - name: Run frozen v0.6.5 gate
+        run: python scripts/run_v065_structural_baseline_audit.py --out evidence/v065/outputs
+      - name: Verify frozen result and committed evidence
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          data = json.loads(Path('evidence/v065/outputs/summary.json').read_text())
+          assert data['version'] == 'v0.6.5-structural-baseline-audit'
+          assert data['confirmatory_depth'] == 8
+          assert data['physical_circuits'] == 256
+          assert data['raw_candidate_views'] == 512
+          assert set(data['methods']) == {
+              'RAW-VIEWS',
+              'VIEW-CANONICAL',
+              'STRUCTURAL-TRANSPORT',
+              'OPERATIONAL-ORACLE',
+          }
+          structural = data['methods']['STRUCTURAL-TRANSPORT']
+          oracle = data['methods']['OPERATIONAL-ORACLE']
+          assert structural['n_classes'] == 50
+          assert structural['exact_false_merges'] == 0
+          assert structural['bernoulli_evidence_shots'] == 0
+          assert structural['logdet'] == data['methods']['VIEW-CANONICAL']['logdet']
+          assert oracle['n_classes'] == 50
+          assert oracle['logdet'] == structural['logdet']
+          assert data['exact_relation_axioms']['transitive'] is True
+          assert data['operational_relation_axioms']['transitive'] is True
+          assert data['structural_baseline_utility_pass'] is True
+          assert data['learned_discovery_suitability_pass'] is False
+          assert data['adaptive_stage_status'] == 'NOT_WARRANTED_ON_THIS_FAMILY'
+          correction = data['development_v064_correction_audit']
+          assert correction['analytic_exact_classes'] == 58
+          assert correction['legacy_fd_operational_classes'] == 91
+          assert correction['analytic_exact_vs_legacy_fd_operational']['reference_pairs_missed'] == 3261
+          print('structural_baseline_utility_pass =', data['structural_baseline_utility_pass'])
+          print('learned_discovery_suitability_pass =', data['learned_discovery_suitability_pass'])
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: v065-structural-baseline-evidence
+          path: evidence/v065/outputs
