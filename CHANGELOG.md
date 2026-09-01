@@ -1,5 +1,15 @@
 # Changelog
 
+## v0.6.6 — external mutation-matrix suitability gate — 2026-09-01
+
+- Rejected a raw-image probe pilot when exact redundancy disappeared after excluding trivial background pixels.
+- Added a pinned external adapter for independently authored Defects4J mutant-test kill matrices.
+- Froze four confirmatory matrices before reading kill outcomes and used exact held-out kill-vector equality as a well-conditioned equivalence oracle.
+- Preserved the failed overall suitability gate: Closure-118 retained only 67 eligible tests, below the required 200.
+- Found strong exact oracle compression on Lang-33 (43.02%), Math-22 (49.33%) and Time-6 (86.53%), with identical fixed greedy mutation coverage.
+- Falsified generic exact development-signature grouping as a safe certificate: 51,316 held-out false merge pairs across four matrices.
+- Reduced aggregate evaluator-only downstream scoring from 33,229 to 8,157 marginal-gain evaluations; no acquisition-runtime claim is made because source execution times are unavailable.
+
 ## v0.6.5 — structural baseline and evaluator audit — 2026-09-01
 
 - Separated deterministic ordinary/complement outcome relabelling from learned physical-circuit compression.

@@ -34,3 +34,11 @@ The reproduced headline is an 83.333% median score-evaluation reduction in the 2
 v0.6.5 contains no uploaded or separately collected dataset. The 256 held-out depth-8 circuits are exhaustively generated from the public `Gxpi2/Gypi2` gate alphabet in pyGSTi 0.10.2's `smq1Q_XYI` model pack.
 
 The authoritative Fisher evaluator is derived analytically from the public ideal gate semantics using integer `SO(3)` orientation transport. Independently generated pyGSTi central finite differences at steps `1e-3`, `1e-4` and `1e-5` are numerical cross-checks, not evaluator truth. Ordinary/complement view labels share one physical binary observation by construction.
+
+## v0.6.6 external mutation matrices
+
+v0.6.6 uses test-by-mutant kill matrices from `donghwan-shin/Diversity-aware-Mutation-Testing`, pinned at source commit `f8d8376e0efe345161f26ff6483a404c8548fe1c` under its MIT license.
+
+Four preregistered CSV matrices were losslessly projected into compressed NPZ files containing only test type, test identifier, mutant identifier and binary kill outcome. `external/mutation/v066/manifest.json` records the source paths, source SHA-256 checksums, compact checksums, dimensions and byte sizes. The compact artifacts load with `allow_pickle=False`.
+
+`Chart-1` was the only outcome matrix inspected during development. The confirmatory matrices were Closure-118, Lang-33, Math-22 and Time-6. Before apparatus freeze, only their filenames, headers, row counts and byte sizes were inspected. Their kill outcomes were read only after preregistration commit `e1dda2c`.

@@ -1,0 +1,56 @@
+{
+  "source_repository": "https://github.com/donghwan-shin/Diversity-aware-Mutation-Testing",
+  "source_commit": "f8d8376e0efe345161f26ff6483a404c8548fe1c",
+  "source_license": "MIT",
+  "selection_rule": "per non-Chart project, lowest SHA-256 of v066-confirm:<project>:<fault> among matrices with >=500 raw tests, >=200 mutants, and <=15000000 bytes",
+  "matrices": [
+    {
+      "project": "Closure",
+      "fault": 118,
+      "source_relative_path": "resources/matrices/Closure/Closure.118f.big.all.Matrix.csv",
+      "source_sha256": "4b20772f886e59d2979f21ef4576cea6a7d61bb673736f685807f91694fd4739",
+      "source_bytes": 11011993,
+      "compact_file": "closure_118.npz",
+      "compact_sha256": "ecacf4b405a1204b8ef5c25aea5a054d9323a77ebdee43be9be81b350246a329",
+      "compact_bytes": 111876,
+      "tests": 8295,
+      "mutants": 623
+    },
+    {
+      "project": "Lang",
+      "fault": 33,
+      "source_relative_path": "resources/matrices/Lang/Lang.33f.big.all.Matrix.csv",
+      "source_sha256": "b45f8987b892f4a413b1104c8dbfc1509c614d379cc5ae02de093affcc0b0bba",
+      "source_bytes": 1841919,
+      "compact_file": "lang_33.npz",
+      "compact_sha256": "c7f6693572a9b28cc0c393d8d149180da6a8b3f51b53c03c50a3317fcb80a81e",
+      "compact_bytes": 16592,
+      "tests": 1401,
+      "mutants": 630
+    },
+    {
+      "project": "Math",
+      "fault": 22,
+      "source_relative_path": "resources/matrices/Math/Math.22f.big.all.Matrix.csv",
+      "source_sha256": "939ab97e9042334fe341fe4ed6208cb9b64a0d2100465d79340885c256d625a5",
+      "source_bytes": 917984,
+      "compact_file": "math_22.npz",
+      "compact_sha256": "cd12820a6f7abe52ba03098e128cd833cfdac10db9598a02e43ade4b7c6c67f7",
+      "compact_bytes": 14150,
+      "tests": 1290,
+      "mutants": 332
+    },
+    {
+      "project": "Time",
+      "fault": 6,
+      "source_relative_path": "resources/matrices/Time/Time.6f.big.all.Matrix.csv",
+      "source_sha256": "d0fab403a2884adf74a39a314db1579de465ff6a1023848e6fa6e5831f8ba0da",
+      "source_bytes": 5780948,
+      "compact_file": "time_6.npz",
+      "compact_sha256": "6709c2aa393e9a484767fedb3cbed347de7235e234417c2dd88235ab52c34964",
+      "compact_bytes": 47551,
+      "tests": 3469,
+      "mutants": 797
+    }
+  ]
+}
