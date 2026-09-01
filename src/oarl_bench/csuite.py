@@ -107,10 +107,13 @@ def load_csuite_interventions(
 
 
 def response_signature(primary: np.ndarray, reference: np.ndarray) -> tuple[np.ndarray, np.ndarray]:
-    """Standardized intervention-minus-reference response with standard error.
+    """Intervention-minus-reference response and standard error in published coordinates.
 
-    The operation uses no graph/SEM metadata and is therefore legal for non-oracle
-    competitors. Columns are kept in the benchmark's published node order.
+    No graph/SEM metadata is used. Crucially, the response vector is not standardized
+    independently by split- or view-specific coordinate variances: doing so can destroy
+    a genuine global affine relation between two response vectors. Competitors may
+    normalize a whole vector using their own frozen method, but the neutral adapter
+    preserves CSuite's common node coordinate system.
     """
 
     if primary.shape != reference.shape or primary.ndim != 2:
@@ -119,13 +122,7 @@ def response_signature(primary: np.ndarray, reference: np.ndarray) -> tuple[np.n
     var = primary.var(axis=0, ddof=1) / primary.shape[0]
     var += reference.var(axis=0, ddof=1) / reference.shape[0]
     se = np.sqrt(np.maximum(var, 1e-18))
-    pooled = np.sqrt(
-        np.maximum(
-            0.5 * (primary.var(axis=0, ddof=1) + reference.var(axis=0, ddof=1)),
-            1e-18,
-        )
-    )
-    return delta / pooled, se / pooled
+    return delta, se
 
 
 def discovery_signatures(views: Iterable[CSuiteView]) -> dict[str, Sequence[float]]:
