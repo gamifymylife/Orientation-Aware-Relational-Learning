@@ -1,9 +1,18 @@
 name: v0.6 CSuite pilot
 
 on:
-  push:
+  pull_request:
     branches:
-      - v06-external-competitive-gate
+      - main
+    paths:
+      - 'src/oarl_bench/csuite.py'
+      - 'src/oarl_bench/competitive.py'
+      - 'tests/test_csuite_v06.py'
+      - 'tests/test_competitive_v06.py'
+      - 'scripts/run_v06_csuite_pilot.py'
+      - 'external/v06/**'
+      - 'evidence/v06/**'
+      - '.github/workflows/v06-csuite-pilot.yml'
   workflow_dispatch:
 
 jobs:
