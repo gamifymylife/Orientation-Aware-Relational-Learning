@@ -1,0 +1,22 @@
+{
+  "study": "OARL v0.7 External Complementarity Gate",
+  "phase": "ACTUAL_REVISION_REPLAY_REVIEW_PRE_OARL",
+  "workflow_run": 33569210424,
+  "head_sha": "0791129060ac15050e22b08eb60ea2e21b70e263",
+  "oarl_executed": false,
+  "attempted": 9,
+  "replay_verified": 9,
+  "failed": 0,
+  "cases": [
+    {"source":"huggingface/smolagents#2029","pre_fix_revision":"87f69c30778113c59f4658af187a8f3f55bd1d6f","post_fix_revision":"563dae88db4a5dd682c152a8ab22794b978935c9","artifact_digest":"sha256:a01d05362a1edaee68b2db57e5b560fe06962a962c03b1720d7fc10e07f5adbc","verified":true},
+    {"source":"huggingface/smolagents#1914","pre_fix_revision":"bae54fd37431c67c6704870cf6e8e5865b72930e","post_fix_revision":"1af07997acf5ac5539581e8faeb79a61f7513030","artifact_digest":"sha256:f563ab633cbccb481fc258aba0a2a81f89d2fea1dd9d9e197bbee547f0137c9e","verified":true},
+    {"source":"huggingface/smolagents#495","pre_fix_revision":"8b1dd44010f749d451c4fc9bdfa9eef0ba130baf","post_fix_revision":"26c733c745007e6f5e84b1fccc6f7be125e4ccc5","artifact_digest":"sha256:88237b014b7cac3121b5d24c2e8b422f568d2e177927c2e0d5762e48225068af","verified":true},
+    {"source":"pydantic/pydantic-ai#7800","pre_fix_revision":"fad54a9ff1c648cc63a1031652912b062d5644c6","post_fix_revision":"83271652e4691e68e13f32972855c1e623141a0a","artifact_digest":"sha256:2a564b7f7c18b4b6e241e482b225fedbdd38fa0a8b07ecb957c71d5209952622","verified":true},
+    {"source":"openai/openai-agents-python#4674","pre_fix_revision":"09814320a13843196489de7e6be21d30d1e29ec4","post_fix_revision":"2b81a9e32708b276846a0cd3721c42e6fb4067e2","artifact_digest":"sha256:e23203e0dff62f651e75c6949f5906b06d2b2616042e22bc8d369d08f1754f9d","verified":true},
+    {"source":"microsoft/autogen#7463","pre_fix_revision":"b0477309d2a0baf489aa256646e41e513ab3bfe8","post_fix_revision":"8544314fa6cc9f906c3ec2395927f5404ffbb5eb","artifact_digest":"sha256:94002090f1007b5af8eed37d31908942929abd391408bb782d5dcbdcab07f210","verified":true},
+    {"source":"crewAIInc/crewAI#7077","pre_fix_revision":"56e0e85a8186abd2929c17fed22e54bbbc327778","post_fix_revision":"039f6ff5f60395334130844bbf955382a24a1058","artifact_digest":"sha256:89e31b7da3fcc69e8c5fcb494b99054213066d3086256a1ee6db5b6e0dc47646","verified":true},
+    {"source":"huggingface/smolagents#1984","pre_fix_revision":"b48889204ad50b6dce7546ae364eedc6ceb87d46","post_fix_revision":"7f21b7480e9510cbee57ec5cae8969646a1f17ed","artifact_digest":"sha256:22b98fc2cbf230a29005497a47d8b4acbf452270b9d9d807a34227f21c94440a","verified":true},
+    {"source":"huggingface/smolagents#1863","pre_fix_revision":"bf94940b1a78d4acbc4905c5bc78ee131f35a9ba","post_fix_revision":"2ae00fb092d1b0e7d74de06e738dd48d04a8b2c2","artifact_digest":"sha256:cbfe85024f0a149fa69c6be112c6d53e33f3a56829ad11836d7d277d6d35426f","verified":true}
+  ],
+  "interpretation": "Nine metadata-selected, OARL-unseen candidates reproduced stable historical A/B contrasts on exact revisions. Together with the twelve previously replay-verified core cases, this yields 21 replay-verified candidates. Replay verification is not adapter admission and does not authorize OARL execution."
+}

@@ -1,0 +1,88 @@
+name: v0.7 external replay preflight
+
+on:
+  pull_request:
+    paths:
+      - "evidence/v07/external/**"
+      - "external/v07/source_replay/**"
+      - "scripts/validate_v07_external_corpus.py"
+      - "tests/test_v07_external_registry.py"
+      - ".github/workflows/v07-external-replay-preflight.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  replay:
+    strategy:
+      fail-fast: false
+      matrix:
+        case_id: [C001, C003, C004, C005, C007, C008, C009, C010, C011, C012, C016, C017]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    steps:
+      - name: Checkout OARL
+        uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Assert contamination boundary and byte-identical frozen verifier
+        env:
+          CASE_ID: ${{ matrix.case_id }}
+        run: |
+          python - <<'PY'
+          import ast
+          import json
+          import os
+          import subprocess
+          from pathlib import Path
+
+          cid = os.environ['CASE_ID']
+          reg = json.loads(Path('evidence/v07/external/CANDIDATE_REGISTRY.json').read_text())
+          manifest = json.loads(Path('external/v07/source_replay/MANIFEST.json').read_text())
+          assert reg['oarl_external_outcomes_executed'] is False
+          assert reg['confirmation_lock_created'] is False
+          row = next(x for x in reg['candidates'] if x['id'] == cid)
+          assert row['oarl_executed'] is False
+
+          entry = manifest['files'][cid]
+          path = Path(entry['path'])
+          actual_blob = subprocess.check_output(['git', 'hash-object', str(path)], text=True).strip()
+          assert actual_blob == entry['git_blob_sha'], (cid, actual_blob, entry['git_blob_sha'])
+
+          tree = ast.parse(path.read_text())
+          constants = {}
+          for node in tree.body:
+              if isinstance(node, ast.Assign) and len(node.targets) == 1 and isinstance(node.targets[0], ast.Name):
+                  try:
+                      constants[node.targets[0].id] = ast.literal_eval(node.value)
+                  except Exception:
+                      pass
+          assert constants['PRE_FIX'] == row['pre_fix_revision']
+          assert constants['POST_FIX'] == row['post_fix_revision']
+          assert constants['CONFIRMATION_REPEATS'] >= 3
+          print(f'{cid}: provenance/contamination boundary PASS; blob={actual_blob}')
+          PY
+
+      - name: Reconfirm exact historical A/B replay
+        env:
+          CASE_ID: ${{ matrix.case_id }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          case_lower="$(echo "$CASE_ID" | tr '[:upper:]' '[:lower:]')"
+          mkdir -p replay-output
+          python "external/v07/source_replay/verify_${case_lower}.py" \
+            | tee "replay-output/${CASE_ID}.json"
+
+      - name: Upload replay evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: v07-replay-${{ matrix.case_id }}
+          path: replay-output/${{ matrix.case_id }}.json
+          if-no-files-found: warn
+          retention-days: 90

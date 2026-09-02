@@ -1,0 +1,218 @@
+{
+  "study": "OARL v0.7 External Complementarity Gate",
+  "phase": "METADATA_ONLY_CANDIDATE_EXPANSION",
+  "protocol": "evidence/v07/external/METADATA_DISCOVERY_PROTOCOL.md",
+  "generated_date": "2026-09-01",
+  "oarl_executed": false,
+  "selected_count": 20,
+  "selected_by_repository": {
+    "openai/openai-agents-python": 2,
+    "microsoft/autogen": 2,
+    "crewAIInc/crewAI": 4,
+    "huggingface/smolagents": 7,
+    "google/adk-python": 3,
+    "pydantic/pydantic-ai": 2
+  },
+  "candidates": [
+    {
+      "source": "openai/openai-agents-python#4728",
+      "repository": "openai/openai-agents-python",
+      "pr_number": 4728,
+      "title": "fix(chat-completions): merge a streamed turn's message into its pending tool-call message",
+      "score": 18,
+      "score_components": ["regression_tests:+8", "test_plan_or_tests:+4", "local:+3", "title_fix_bug_regression:+3"],
+      "status": "METADATA_ONLY_NEEDS_ACTUAL_REVISION_REPLAY",
+      "oarl_executed": false
+    },
+    {
+      "source": "openai/openai-agents-python#4674",
+      "repository": "openai/openai-agents-python",
+      "pr_number": 4674,
+      "title": "fix(core): reject **kwargs keys that collide with named tool parameters",
+      "score": 7,
+      "score_components": ["test_plan_or_tests:+4", "title_fix_bug_regression:+3"],
+      "status": "METADATA_ONLY_NEEDS_ACTUAL_REVISION_REPLAY",
+      "oarl_executed": false
+    },
+    {
+      "source": "microsoft/autogen#7054",
+      "repository": "microsoft/autogen",
+      "pr_number": 7054,
+      "title": "Add missing reasoning_effort parameter support for OpenAI GPT-5 models",
+      "score": 6,
+      "score_components": ["reproduction:+6"],
+      "status": "METADATA_ONLY_NEEDS_ACTUAL_REVISION_REPLAY",
+      "oarl_executed": false
+    },
+    {
+      "source": "microsoft/autogen#7463",
+      "repository": "microsoft/autogen",
+      "pr_number": 7463,
+      "title": "fix: restrict importlib provider loading to trusted namespaces",
+      "score": 7,
+      "score_components": ["test_plan_or_tests:+4", "title_fix_bug_regression:+3"],
+      "status": "METADATA_ONLY_NEEDS_ACTUAL_REVISION_REPLAY",
+      "oarl_executed": false
+    },
+    {
+      "source": "crewAIInc/crewAI#7125",
+      "repository": "crewAIInc/crewAI",
+      "pr_number": 7125,
+      "title": "fix: include conditional execution for task marked as done in flow persistence",
+      "score": 11,
+      "score_components": ["regression_tests:+8", "title_fix_bug_regression:+3"],
+      "status": "METADATA_ONLY_NEEDS_ACTUAL_REVISION_REPLAY",
+      "oarl_executed": false
+    },
+    {
+      "source": "crewAIInc/crewAI#7133",
+      "repository": "crewAIInc/crewAI",
+      "pr_number": 7133,
+      "title": "fix: restore overloaded before kickoff hooks to execute",
+      "score": 15,
+      "score_components": ["regression_tests:+8", "test_plan_or_tests:+4", "title_fix_bug_regression:+3"],
+      "status": "METADATA_ONLY_NEEDS_ACTUAL_REVISION_REPLAY",
+      "oarl_executed": false
+    },
+    {
+      "source": "crewAIInc/crewAI#7171",
+      "repository": "crewAIInc/crewAI",
+      "pr_number": 7171,
+      "title": "feat: add BaseEventListener for scoped event handling",
+      "score": 7,
+      "score_components": ["test_plan_or_tests:+4", "local:+3"],
+      "status": "METADATA_ONLY_NEEDS_ACTUAL_REVISION_REPLAY",
+      "oarl_executed": false
+    },
+    {
+      "source": "crewAIInc/crewAI#7077",
+      "repository": "crewAIInc/crewAI",
+      "pr_number": 7077,
+      "title": "fix(llms): raise Anthropic default max_tokens so large tool calls survive",
+      "score": 7,
+      "score_components": ["test_plan_or_tests:+4", "title_fix_bug_regression:+3"],
+      "status": "METADATA_ONLY_NEEDS_ACTUAL_REVISION_REPLAY",
+      "oarl_executed": false
+    },
+    {
+      "source": "huggingface/smolagents#1984",
+      "repository": "huggingface/smolagents",
+      "pr_number": 1984,
+      "title": "Fix load_tool anonymous class name bug",
+      "score": 11,
+      "score_components": ["regression_tests:+8", "title_fix_bug_regression:+3"],
+      "status": "METADATA_ONLY_NEEDS_ACTUAL_REVISION_REPLAY",
+      "oarl_executed": false
+    },
+    {
+      "source": "huggingface/smolagents#1983",
+      "repository": "huggingface/smolagents",
+      "pr_number": 1983,
+      "title": "Fix incorrect client initialization for Yandex Cloud serverless API",
+      "score": 11,
+      "score_components": ["regression_tests:+8", "title_fix_bug_regression:+3"],
+      "status": "METADATA_ONLY_NEEDS_ACTUAL_REVISION_REPLAY",
+      "oarl_executed": false
+    },
+    {
+      "source": "huggingface/smolagents#2029",
+      "repository": "huggingface/smolagents",
+      "pr_number": 2029,
+      "title": "Fix evaluate_with() calling __exit__ on wrong object",
+      "score": 7,
+      "score_components": ["test_plan_or_tests:+4", "title_fix_bug_regression:+3"],
+      "status": "METADATA_ONLY_NEEDS_ACTUAL_REVISION_REPLAY",
+      "oarl_executed": false
+    },
+    {
+      "source": "huggingface/smolagents#1914",
+      "repository": "huggingface/smolagents",
+      "pr_number": 1914,
+      "title": "fix: prevent FinalAnswerException from being caught by except Exception",
+      "score": 13,
+      "score_components": ["reproduction:+6", "test_plan_or_tests:+4", "title_fix_bug_regression:+3"],
+      "status": "METADATA_ONLY_NEEDS_ACTUAL_REVISION_REPLAY",
+      "oarl_executed": false
+    },
+    {
+      "source": "huggingface/smolagents#1903",
+      "repository": "huggingface/smolagents",
+      "pr_number": 1903,
+      "title": "fix(gradio_ui): Gradio 6 compatibility",
+      "score": 7,
+      "score_components": ["test_plan_or_tests:+4", "title_fix_bug_regression:+3"],
+      "status": "METADATA_ONLY_NEEDS_ACTUAL_REVISION_REPLAY",
+      "oarl_executed": false
+    },
+    {
+      "source": "huggingface/smolagents#1863",
+      "repository": "huggingface/smolagents",
+      "pr_number": 1863,
+      "title": "Fix: Add backward compatibility for deprecated HfApiModel",
+      "score": 6,
+      "score_components": ["local:+3", "title_fix_bug_regression:+3"],
+      "status": "METADATA_ONLY_NEEDS_ACTUAL_REVISION_REPLAY",
+      "oarl_executed": false
+    },
+    {
+      "source": "huggingface/smolagents#495",
+      "repository": "huggingface/smolagents",
+      "pr_number": 495,
+      "title": "Fix undefined step_number in single_step run",
+      "score": 9,
+      "score_components": ["reproduction:+6", "title_fix_bug_regression:+3"],
+      "status": "METADATA_ONLY_NEEDS_ACTUAL_REVISION_REPLAY",
+      "oarl_executed": false
+    },
+    {
+      "source": "google/adk-python#6918",
+      "repository": "google/adk-python",
+      "pr_number": 6918,
+      "title": "fix: end a ParallelAgent early only when a direct sub-agent escalates (cherry-pick to release/candidate)",
+      "score": 18,
+      "score_components": ["regression_tests:+8", "test_plan_or_tests:+4", "local:+3", "title_fix_bug_regression:+3"],
+      "status": "METADATA_ONLY_NEEDS_ACTUAL_REVISION_REPLAY",
+      "oarl_executed": false
+    },
+    {
+      "source": "google/adk-python#6888",
+      "repository": "google/adk-python",
+      "pr_number": 6888,
+      "title": "fix: preserve event ordering in live request queue",
+      "score": 15,
+      "score_components": ["regression_tests:+8", "test_plan_or_tests:+4", "title_fix_bug_regression:+3"],
+      "status": "METADATA_ONLY_NEEDS_ACTUAL_REVISION_REPLAY",
+      "oarl_executed": false
+    },
+    {
+      "source": "google/adk-python#5215",
+      "repository": "google/adk-python",
+      "pr_number": 5215,
+      "title": "fix: preserve function-call identifiers across Gemini live turns",
+      "score": 15,
+      "score_components": ["reproduction:+6", "test_plan_or_tests:+4", "title_fix_bug_regression:+3", "before_after:+2"],
+      "status": "METADATA_ONLY_NEEDS_ACTUAL_REVISION_REPLAY",
+      "oarl_executed": false
+    },
+    {
+      "source": "pydantic/pydantic-ai#7800",
+      "repository": "pydantic/pydantic-ai",
+      "pr_number": 7800,
+      "title": "Fix TestModel generation for narrow exclusive numeric bounds",
+      "score": 17,
+      "score_components": ["regression_tests:+8", "reproduction:+6", "title_fix_bug_regression:+3"],
+      "status": "METADATA_ONLY_NEEDS_ACTUAL_REVISION_REPLAY",
+      "oarl_executed": false
+    },
+    {
+      "source": "pydantic/pydantic-ai#7077",
+      "repository": "pydantic/pydantic-ai",
+      "pr_number": 7077,
+      "title": "Scope safe_download cookies to original hostnames",
+      "score": 11,
+      "score_components": ["regression_tests:+8", "mock:+3"],
+      "status": "METADATA_ONLY_NEEDS_ACTUAL_REVISION_REPLAY",
+      "oarl_executed": false
+    }
+  ]
+}
