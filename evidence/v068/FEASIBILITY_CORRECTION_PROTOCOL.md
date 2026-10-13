@@ -41,6 +41,7 @@ For each case, method and target report: development feasibility, retained test 
 cd "$HOME/oarl-v067-validation/OARL"
 git pull --ff-only origin research/v067-safe-quotient-development-v01
 source .venv/bin/activate
+python -m pip install "scipy>=1.15"
 python -m pytest -q tests/test_v068_feasibility_audit.py
 python scripts/run_v068_feasibility_audit.py \
   --manifest "$HOME/oarl-v067-validation/prepared/manifest.json" \
