@@ -22,7 +22,7 @@ def write_matrix(root: Path, project="Chart", fault=2):
                         mutant_ids=np.asarray(["m1", "m2", "m3", "m4"]),
                         kills=np.asarray([[1,0,1,0],[1,0,0,1],[0,1,0,1]], dtype=np.uint8))
     asset = {"path": p.name, "project": project, "fault": fault,
-             "sha256": engine.sha256(p), "upstream_url": "https://example.org/pinned", "upstream_commit": "commit123"}
+             "sha256": engine.sha256(p), "upstream_url": "https://example.org/pinned", "upstream_commit": "a" * 40}
     return p, asset
 
 
