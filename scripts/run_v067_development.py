@@ -186,37 +186,82 @@ def analyze_split(development: np.ndarray, heldout: np.ndarray, *, budget: int =
             "arms": arms}
 
 
-def run(manifest_path: Path, data_root: Path, *, budget: int = 20) -> dict[str, Any]:
+
+def require_frozen_selection(manifest: dict, selection_lock_path: Path) -> dict:
+    lock = json.loads(selection_lock_path.read_text(encoding="utf-8"))
+    if lock.get("schema") != "oarl-v067-source-selection-lock-1":
+        raise ValueError("missing or unrecognized pre-outcome selection lock")
+    candidates = lock.get("candidates", [])
+    assets = manifest.get("assets", [])
+    if len(candidates) != 4 or len(assets) != 4:
+        raise ValueError("must retain all four frozen candidates; no replacement")
+    actual_ids = [(str(a["project"]), int(a["fault"])) for a in assets]
+    expected_ids = [(str(a["project"]), int(a["fault"])) for a in candidates]
+    if actual_ids != expected_ids:
+        raise ValueError("matrix order or identity differs from the frozen selection")
+    for item, asset in zip(candidates, assets):
+        for key in ("source_relative_path", "source_git_blob_sha"):
+            if asset.get(key) != item[key]:
+                raise ValueError(f"source identity mismatch on {key}")
+        if asset.get("upstream_commit") != lock["upstream_commit"]:
+            raise ValueError("upstream commit differs from selection lock")
+    return lock
+
+def run(manifest_path: Path, data_root: Path, selection_lock_path: Path, *, budget: int = 20) -> dict[str, Any]:
     manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
-    assets = check_manifest(manifest, data_root)
-    rows = []
+    lock = require_frozen_selection(manifest, selection_lock_path)
+    assets = check_manifest(manifest, data_root, minimum=4)
+    cohort = []
     for asset, path in assets:
         types, names, ids, kills = load_asset(path, asset)
         mask = split_mask(ids, str(asset["project"]), int(asset["fault"]))
         canonical = canonical_active_rows(types, names, kills[:, mask])
-        if len(canonical) < 200:
-            raise ValueError(f"{asset['project']}-{asset['fault']} has only {len(canonical)} eligible tests (min 200)")
-        result = analyze_split(kills[canonical][:, mask], kills[canonical][:, ~mask], budget=budget)
-        rows.append({"project": asset["project"], "fault": asset["fault"],
-                     "asset_sha256": asset["sha256"], "upstream_commit": asset["upstream_commit"],
-                     "source_claim": asset["upstream_url"], "metrics": result})
+        admission = {"project": asset["project"], "fault": asset["fault"],
+                     "asset_sha256": asset["sha256"],
+                     "upstream_commit": asset["upstream_commit"],
+                     "source_claim": asset["upstream_url"],
+                     "development_active_tests": int(len(canonical)),
+                     "development_mutants": int(mask.sum()),
+                     "heldout_mutants_count_only": int((~mask).sum()),
+                     "eligible": len(canonical) >= 200}
+        cohort.append((admission, canonical, kills, mask))
+    eligible_count = sum(a["eligible"] for a, _, _, _ in cohort)
+    if eligible_count < 3:
+        # Critically do NOT access heldout values for analysis if eligibility fails.
+        return {"protocol": "v067-development-1",
+                "outcome": "STOP_INSUFFICIENT_ELIGIBLE_MATRICES",
+                "evaluation_secret": "NONE: public data; procedural split only",
+                "frozen_source_commit": lock["upstream_commit"],
+                "eligible_count": eligible_count,
+                "matrices": [a for a, _, _, _ in cohort]}
+    rows = []
+    for admission, canonical, kills, mask in cohort:
+        if admission["eligible"]:
+            admission["metrics"] = analyze_split(
+                kills[canonical][:, mask], kills[canonical][:, ~mask], budget=budget
+            )
+            admission["status"] = "DEVELOPMENT_ONLY_EVALUATED"
+        else:
+            admission["status"] = "DEVELOPMENT_ONLY_INELIGIBLE_NOT_SCORED"
+        rows.append(admission)
     return {"protocol": "v067-development-1", "outcome": "DEVELOPMENT_ONLY_NOT_CONFIRMATORY",
             "evaluation_secret": "NONE: public fault data; split only protects procedural leakage",
             "frozen_methods": list(METHODS), "mutant_split": "sha256 v067-develop 1-byte threshold 128",
-            "greedy_test_budget": budget, "matrices": rows,
+            "greedy_test_budget": budget, "eligible_count": eligible_count,
+            "frozen_source_commit": lock["upstream_commit"], "matrices": rows,
             "claim": "No OARL-specific safe discovery or real execution-cost advantage tested."}
-
 
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--manifest", type=Path, required=True)
     parser.add_argument("--data-root", type=Path, required=True)
     parser.add_argument("--out", type=Path, required=True)
+    parser.add_argument("--selection-lock", type=Path, default=Path("evidence/v067/SELECTION_LOCK.json"))
     args = parser.parse_args()
     # Do not overwrite earlier runs; their evidence and consumed holdouts stay immutable.
     if args.out.exists():
         parser.error(f"output already exists: {args.out}")
-    report = run(args.manifest, args.data_root)
+    report = run(args.manifest, args.data_root, args.selection_lock)
     args.out.parent.mkdir(parents=True, exist_ok=True)
     args.out.write_text(json.dumps(report, indent=2) + "\n", encoding="utf-8")
     print(f"DEVELOPMENT_ONLY; recorded {len(report['matrices'])} matrices in {args.out}")
