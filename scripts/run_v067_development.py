@@ -153,6 +153,7 @@ def analyze_split(development: np.ndarray, heldout: np.ndarray, *, budget: int =
         raise ValueError("invalid split")
     plans = {method: (groups_for(development, method)) for method in METHODS}
     selections = {method: greedy_on_development(plans[method], development, budget) for method in METHODS}
+    all_hits = np.any(heldout, axis=0)
     raw_selected = selections["raw"][0]
     raw_hits = np.any(heldout[raw_selected], axis=0) if raw_selected else np.zeros(heldout.shape[1], dtype=bool)
     arms = {}
@@ -160,6 +161,8 @@ def analyze_split(development: np.ndarray, heldout: np.ndarray, *, budget: int =
         groups = plans[method]
         selected, score_calls = selections[method]
         hits = np.any(heldout[selected], axis=0) if selected else np.zeros(heldout.shape[1], dtype=bool)
+        retained = sorted(min(g) for g in groups)
+        retained_hits = np.any(heldout[retained], axis=0) if retained else np.zeros(heldout.shape[1], dtype=bool)
         pairs = sum(len(g) * (len(g) - 1) // 2 for g in groups)
         false = false_merge_pairs(groups, heldout)
         arms[method] = {
@@ -168,6 +171,7 @@ def analyze_split(development: np.ndarray, heldout: np.ndarray, *, budget: int =
             "heldout_pair_precision": (pairs - false) / pairs if pairs else None,
             "selected_local_rows": selected, "selected_count": len(selected),
             "development_planning_score_evaluations": score_calls,
+            "heldout_detectable_mutants_lost_by_discarding_class_members": int(np.sum(all_hits & ~retained_hits)),
             "heldout_covered_mutants": int(np.sum(hits)),
             "heldout_missed_vs_raw": int(np.sum(raw_hits & ~hits)),
             "heldout_new_vs_raw": int(np.sum(~raw_hits & hits)),
