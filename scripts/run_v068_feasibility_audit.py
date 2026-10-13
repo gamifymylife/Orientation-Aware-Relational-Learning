@@ -181,6 +181,7 @@ def evaluate(dev: np.ndarray, outer: np.ndarray, methods=METHODS,
             arms.append({
                 "method": "set_cover_milp", "redundancy_target": redundancy,
                 "retained_count": len(chosen), "retained_fraction": len(chosen)/len(dev),
+                "selected_indices": chosen,
                 "development_coverage_verified": True,
                 "outer_detectable_mutants": int(complete_outer.sum()),
                 "outer_detected_mutants": int(detected.sum()),
