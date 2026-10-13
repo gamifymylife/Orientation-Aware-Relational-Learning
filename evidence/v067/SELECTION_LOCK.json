@@ -1,0 +1,68 @@
+{
+  "schema": "oarl-v067-source-selection-lock-1",
+  "status": "PRE_OUTCOME_SELECTION_FROZEN_NO_MATRIX_ROWS_READ",
+  "purpose": "Development-only eligibility assessment; never independent confirmation",
+  "source_repository": "https://github.com/donghwan-shin/Diversity-aware-Mutation-Testing",
+  "upstream_commit": "f8d8376e0efe345161f26ff6483a404c8548fe1c",
+  "catalog": "resources/matrices/generatedMatrices_all.csv",
+  "selection_rule": {
+    "projects": [
+      "Chart",
+      "Lang",
+      "Math",
+      "Time"
+    ],
+    "matrix_suffix": ".big.all.Matrix.csv",
+    "raw_test_count_minimum": 1200,
+    "raw_mutant_count_minimum": 300,
+    "source_bytes_minimum": 100000,
+    "source_bytes_maximum": 5000000,
+    "ordering": "lowest numeric fault identifier per project among matching metadata",
+    "burned_faults": [
+      "Closure-118",
+      "Lang-33",
+      "Math-22",
+      "Time-6"
+    ],
+    "qualification": "all four selected in advance; no backfilling if <200 development-active tests; require >=3 eligible to proceed"
+  },
+  "candidates": [
+    {
+      "project": "Chart",
+      "fault": 1,
+      "source_relative_path": "resources/matrices/Chart/Chart.1f.big.all.Matrix.csv",
+      "source_bytes": 1931664,
+      "source_git_blob_sha": "28ecac4d61fbabca4d0b22cab3105ebf3ee736be",
+      "metadata_raw_tests": 1530,
+      "metadata_raw_mutants": 601
+    },
+    {
+      "project": "Lang",
+      "fault": 9,
+      "source_relative_path": "resources/matrices/Lang/Lang.9f.big.all.Matrix.csv",
+      "source_bytes": 1483469,
+      "source_git_blob_sha": "b789efae944e4edf4bc306d70d29e4281e4fc9f7",
+      "metadata_raw_tests": 1718,
+      "metadata_raw_mutants": 408
+    },
+    {
+      "project": "Math",
+      "fault": 1,
+      "source_relative_path": "resources/matrices/Math/Math.1f.big.all.Matrix.csv",
+      "source_bytes": 4381793,
+      "source_git_blob_sha": "53a969404e4b3786ac6b154308da307f4c68f649",
+      "metadata_raw_tests": 1774,
+      "metadata_raw_mutants": 1208
+    },
+    {
+      "project": "Time",
+      "fault": 4,
+      "source_relative_path": "resources/matrices/Time/Time.4f.big.all.Matrix.csv",
+      "source_bytes": 2215113,
+      "source_git_blob_sha": "97d621abf15eaf4f73aced4eca90c418f6bfa027",
+      "metadata_raw_tests": 1900,
+      "metadata_raw_mutants": 554
+    }
+  ],
+  "note": "Selection read only project/fault/raw dimensions/file sizes/Git blob hashes, not test/mutant kill values. This does not make publicly available data an institutionally sealed holdout."
+}
