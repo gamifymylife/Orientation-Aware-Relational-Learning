@@ -84,3 +84,14 @@ def test_detects_downstream_missed_mutant_not_only_total_coverage():
     assert result["arms"]["exact_development"]["heldout_false_merge_pairs"] == 1
     assert result["real_execution_savings_measured"] is False
     assert result["oarl_specific_method_evaluated"] is False
+
+
+def test_quotient_discards_hidden_detection_despite_identical_dev_greedy():
+    dev = np.asarray([[1,0],[1,0],[0,1]], dtype=np.uint8)
+    hidden = np.asarray([[1,0],[1,1],[0,0]], dtype=np.uint8)
+    result = engine.analyze_split(dev,hidden,budget=2)["arms"]
+    assert result["raw"]["heldout_detectable_mutants_lost_by_discarding_class_members"] == 0
+    assert result["exact_development"]["heldout_detectable_mutants_lost_by_discarding_class_members"] == 1
+    # This shows why development-only greedy detection-vector agreement is
+    # NOT enough to claim a safe quotient.
+    assert result["exact_development"]["preserved_raw_holdout_detection_vector"] is True
