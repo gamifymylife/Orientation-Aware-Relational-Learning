@@ -54,8 +54,10 @@ def check_manifest(manifest: dict[str, Any], data_root: Path, *, minimum: int = 
             raise ValueError("a 64-digit sha256 is mandatory")
         if sha256(candidate) != recorded_sha:
             raise ValueError(f"SHA-256 mismatch: {relative}")
-        if not str(asset.get("upstream_url", "")).startswith("https://") or not str(asset.get("upstream_commit", "")):
-            raise ValueError("upstream URL and immutable source revision required")
+        upstream_commit = str(asset.get("upstream_commit", "")).lower()
+        if (not str(asset.get("upstream_url", "")).startswith("https://") or
+                len(upstream_commit) != 40 or any(c not in "0123456789abcdef" for c in upstream_commit)):
+            raise ValueError("upstream URL and 40-hex commit SHA required")
         resolved.append((asset, candidate))
     return resolved
 
